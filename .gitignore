@@ -7,3 +7,11 @@
 /Eshop.Models/obj
 /Eshop.Web/Emails
 /Eshop.Web/obj
+/Eshop.Utils/bin/Debug/net8.0
+/Eshop.Utils/obj
+/Eshop.ViewModels/bin/Debug/net8.0
+/Eshop.ViewModels/obj
+/Eshop.Web/.vs/Eshop/config
+/Eshop.Web/.vs/Eshop
+/Eshop.Web/bin/Debug/net8.0
+/Eshop.Web/Properties
