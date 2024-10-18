@@ -1,4 +1,4 @@
-﻿namespace Eshop.Web.Common
+﻿namespace Eshop.Utils
 {
     public class EmailSettings
     {

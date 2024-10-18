@@ -1,4 +1,4 @@
-﻿@model Eshop.Web.Models.Product
+﻿@model Eshop.Models.BusinessDomains.Product
 
 @{
     ViewData["Title"] = "Edit";
@@ -12,11 +12,11 @@
     <div class="col-md-4">
         <form asp-action="Edit" enctype="multipart/form-data">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="ProductID" />
+            <input type="hidden" asp-for="AutoId" />
             <input type="hidden" asp-for="ImageName" />
             <input type="hidden" asp-for="ImagePath" />
-            <input type="hidden" asp-for="CREATED_BY" />
-            <input type="hidden" asp-for="CREATED_DATE" />
+            <input type="hidden" asp-for="CreatedBy" />
+            <input type="hidden" asp-for="CreatedDate" />
             <div class="form-group">
                 <label asp-for="Name" class="control-label"></label>
                 <input asp-for="Name" class="form-control" />
@@ -33,14 +33,9 @@
                 <span asp-validation-for="Price" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Buying_Price" class="control-label"></label>
-                <input asp-for="Buying_Price" class="form-control" />
-                <span asp-validation-for="Buying_Price" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="CURRENT_STOCK" class="control-label"></label>
-                <input asp-for="CURRENT_STOCK" class="form-control" />
-                <span asp-validation-for="CURRENT_STOCK" class="text-danger"></span>
+                <label asp-for="CurrentStock" class="control-label"></label>
+                <input asp-for="CurrentStock" class="form-control" />
+                <span asp-validation-for="CurrentStock" class="text-danger"></span>
             </div>
             @*<div>
                 @Html.DisplayNameFor(m=>m.ImageData)

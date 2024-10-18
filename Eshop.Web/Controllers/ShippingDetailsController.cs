@@ -9,17 +9,14 @@ using Microsoft.EntityFrameworkCore;
 using Eshop.Web.Common;
 using Eshop.Web.Data;
 using Eshop.Web.Models;
+using Eshop.Utils;
+using Eshop.Models.BusinessDomains;
 
 namespace Eshop.Web.Controllers
 {
-    public class ShippingDetailsController : BaseController<ShippingDetailsController>
+    public class ShippingDetailsController(ApplicationDbContext context) : BaseController<ShippingDetailsController>
     {
-        private readonly ApplicationDbContext _context;
-
-        public ShippingDetailsController(ApplicationDbContext context)
-        {
-            _context = context;
-        }
+        private readonly ApplicationDbContext _context = context;
 
         // GET: ShippingDetails
         public async Task<IActionResult> Index()
@@ -39,7 +36,7 @@ namespace Eshop.Web.Controllers
             }
 
             var shippingDetails = await _context.ShippingDetails
-                .FirstOrDefaultAsync(m => m.AUTO_ID == id);
+                .FirstOrDefaultAsync(m => m.AutoId == id);
             if (shippingDetails == null)
             {
                 return NotFound();
@@ -47,8 +44,8 @@ namespace Eshop.Web.Controllers
             else
             {
                 shippingDetails.IsConfirmed = true;
-                shippingDetails.CONFIRM_BY = CurrentUserName;
-                shippingDetails.CONFIRM_DATE = DateTime.Today;
+                shippingDetails.ConfirmBy = CurrentUserName;
+                shippingDetails.ConfirmDate = DateTime.Today;
                 UpDateProduct(id);
 
                 _context.ShippingDetails.Update(shippingDetails);
@@ -67,9 +64,9 @@ namespace Eshop.Web.Controllers
             var shipmentOrder = _context.ShipmentOrders.Where(x => x.ShippingDetailsId == id).ToList();
             foreach (var i in shipmentOrder)
             {
-                var Product_ = _context.Products.Where(x => x.ProductID == i.PRODUCT_ID).FirstOrDefault();
-                Product_.CURRENT_STOCK = Product_.CURRENT_STOCK - i.QUANTITY;
-                if(Product_.CURRENT_STOCK == 0)
+                var Product_ = _context.Products.Where(x => x.AutoId == i.ProductId).FirstOrDefault();
+                Product_.CurrentStock = Product_.CurrentStock - i.Quantity;
+                if(Product_.CurrentStock == 0)
                 {
                     Product_.IsAvailabe = false;
                 }
@@ -123,7 +120,7 @@ namespace Eshop.Web.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("AUTO_ID,Name,Line1,Line2,Line3,City,State,Zip,Country,GiftWrap,IsConfirmed")] ShippingDetails shippingDetails)
+        public async Task<IActionResult> Create(ShippingDetails shippingDetails)
         {
             if (ModelState.IsValid)
             {
@@ -155,9 +152,9 @@ namespace Eshop.Web.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("AUTO_ID,Name,Line1,Line2,Line3,City,State,Zip,Country,GiftWrap,IsConfirmed")] ShippingDetails shippingDetails)
+        public async Task<IActionResult> Edit(int id,ShippingDetails shippingDetails)
         {
-            if (id != shippingDetails.AUTO_ID)
+            if (id != shippingDetails.AutoId)
             {
                 return NotFound();
             }
@@ -171,7 +168,7 @@ namespace Eshop.Web.Controllers
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!ShippingDetailsExists(shippingDetails.AUTO_ID))
+                    if (!ShippingDetailsExists(shippingDetails.AutoId))
                     {
                         return NotFound();
                     }
@@ -194,7 +191,7 @@ namespace Eshop.Web.Controllers
             }
 
             var shippingDetails = await _context.ShippingDetails
-                .FirstOrDefaultAsync(m => m.AUTO_ID == id);
+                .FirstOrDefaultAsync(m => m.AutoId == id);
             if (shippingDetails == null)
             {
                 return NotFound();
@@ -235,7 +232,7 @@ namespace Eshop.Web.Controllers
         }
         private bool ShippingDetailsExists(int id)
         {
-          return _context.ShippingDetails.Any(e => e.AUTO_ID == id);
+          return _context.ShippingDetails.Any(e => e.AutoId == id);
         }
         protected override void Dispose(bool disposing)
         {

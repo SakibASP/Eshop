@@ -1,16 +1,15 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using System.ComponentModel;
+﻿using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Eshop.Web.Models
+namespace Eshop.Models.BusinessDomains
 {
     [Table("Products")]
     public class Product
     {
         [Key]
-        [HiddenInput(DisplayValue = false)]
-        public int ProductID { get; set; }
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        public int AutoId { get; set; }
 
         [Required(ErrorMessage = "Please enter a product name")]
         public string? Name { get; set; }
@@ -24,16 +23,12 @@ namespace Eshop.Web.Models
         [Range(0.01, double.MaxValue, ErrorMessage = "Please enter a positive price")]
         public double Price { get; set; }
 
-        [Required]
-        [DisplayName("Buy Price")]
-        [Range(0.01, double.MaxValue, ErrorMessage = "Please enter a positive price")]
-        public double Buying_Price { get; set; }
-        public string? CREATED_BY { get; set; }
-        public DateTime? CREATED_DATE { get; set; }
+        public string? CreatedBy { get; set; }
+        public DateTime? CreatedDate { get; set; }
 
         [DisplayName("Stock")]
         [Range(0,50, ErrorMessage = "Please enter between 1 to 50")]
-        public int CURRENT_STOCK { get; set; }
+        public int CurrentStock { get; set; }
 
         [DisplayName("Category")]
         [Required(ErrorMessage = "Please specify a category")]
@@ -46,7 +41,7 @@ namespace Eshop.Web.Models
         public string? ImagePath { get; set; }
 
         [NotMapped]
-        public double TOTAL_PRICE { get { return (CURRENT_STOCK == 0 ? 1 : CURRENT_STOCK) * Buying_Price; } }
+        public double TotalPrice { get { return (CurrentStock == 0 ? 1 : CurrentStock) * Price; } }
 
         [ForeignKey("Cat_Id")]
         [DisplayName("Category")]

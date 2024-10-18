@@ -1,7 +1,7 @@
 ﻿
 @*@model IPagedList<Eshop.Web.Models.ViewModels.ProductViewModel>*@
 
-@model Eshop.Web.Helper.PaginatedList<Eshop.Web.Models.ViewModels.ProductViewModel>
+@model Eshop.Web.Helper.PaginatedList<Eshop.ViewModels.BusinessDomains.ProductViewModel>
 
 @*@using X.PagedList.Mvc.Core;
 @using X.PagedList;*@
@@ -78,7 +78,7 @@
             <div class="row">
                 <h4><strong>Current Status</strong></h4>
                 <p>@Html.Editor("Price",new { htmlAttributes = new { @style = "width:100px;background-color: MidnightBlue;color:white;font-size:18px;", @readonly = "readonly", @id = "Price" } }) <strong>Price</strong></p>
-                <p>@Html.Editor("CURRENT_STOCK",new { htmlAttributes = new { @style = "width:100px;background-color: MidnightBlue;color:white;font-size:18px;", @readonly = "readonly", @id = "CURRENT_STOCK" } }) <strong>Stock</strong></p>
+                <p>@Html.Editor("CurrentStock",new { htmlAttributes = new { @style = "width:100px;background-color: MidnightBlue;color:white;font-size:18px;", @readonly = "readonly", @id = "CurrentStock" } }) <strong>Stock</strong></p>
             </div>
         </div>
 
@@ -99,7 +99,7 @@
                         <div class="card bg-transparent">
                             <div class="card-body">
                                 @Html.HiddenFor(x=>item.Price)
-                                @Html.HiddenFor(x=>item.CURRENT_STOCK)
+                                @Html.HiddenFor(x=>item.CurrentStock)
                                 <div class="text-center">
                                     @if (item.ImagePath != null)
                                     {
@@ -199,7 +199,7 @@
             </div>
             <div class="row">
                 <div class="col-6">@Html.Editor("Price",new { htmlAttributes = new { @style = "width:100px;background-color: MidnightBlue;color:white;font-size:18px;", @readonly = "readonly", @id = "PriceM" } }) </div>
-                <div class="col-6">@Html.Editor("CURRENT_STOCK",new { htmlAttributes = new { @style = "width:100px;background-color: MidnightBlue;color:white;font-size:18px;", @readonly = "readonly", @id = "CURRENT_STOCK_M" } })</div>
+                <div class="col-6">@Html.Editor("CurrentStock",new { htmlAttributes = new { @style = "width:100px;background-color: MidnightBlue;color:white;font-size:18px;", @readonly = "readonly", @id = "CurrentStock_M" } })</div>
             </div>
         </div>
 
@@ -214,7 +214,7 @@
                         <div class="card bg-light" style="height:275px;">
                             <div class="card-body">
                                 @Html.HiddenFor(x=>item.Price , new { @id = "m_price" })
-                                @Html.HiddenFor(x=>item.CURRENT_STOCK, new { @id = "m_stock" })
+                                @Html.HiddenFor(x=>item.CurrentStock, new { @id = "m_stock" })
                                 <div class="text-center">
                                     @if (item.ProductImageID != null)
                                     {
@@ -317,7 +317,7 @@ Page &nbsp; @Model.PageIndex &nbsp; of &nbsp; @Model.TotalPages &nbsp;
         // Hover product details
         $(".card").hover(
             function () {
-                let stock = parseInt($(this).closest('.card').find('#item_CURRENT_STOCK').val());
+                let stock = parseInt($(this).closest('.card').find('#item_CurrentStock').val());
                 let price = parseFloat($(this).closest('.card').find('#item_Price').val());     
                 //alert(price);
                 //alert(stock);
@@ -341,21 +341,21 @@ Page &nbsp; @Model.PageIndex &nbsp; of &nbsp; @Model.TotalPages &nbsp;
                 //alert(Available);
                 
                 $("#Price").val(price);
-                $("#CURRENT_STOCK").val(stock);
+                $("#CurrentStock").val(stock);
 
                 // for Mobile
                 let stockM = parseInt($(this).closest('.card').find('#m_stock').val());
                 let priceM = parseFloat($(this).closest('.card').find('#m_price').val());
                 $("#PriceM").val(priceM);
-                $("#CURRENT_STOCK_M").val(stockM);
+                $("#CurrentStock_M").val(stockM);
             },
             function () {
                 $("#Price").val(null);               
-                $("#CURRENT_STOCK").val(null);
+                $("#CurrentStock").val(null);
 
                 // for Mobile
                 $("#PriceM").val(null);
-                $("#CURRENT_STOCK_M").val(null);
+                $("#CurrentStock_M").val(null);
             }
         );
 

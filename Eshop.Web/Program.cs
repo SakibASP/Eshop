@@ -2,7 +2,7 @@ using FastReport.Data;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Eshop.Web.Binder;
-using Eshop.Web.Common;
+using Eshop.Utils;
 using Eshop.Web.Data;
 using Eshop.Web.Interfaces;
 using Eshop.Web.Models;
@@ -29,13 +29,13 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddControllersWithViews().AddNewtonsoftJson();
 
 //Mail shipping
-EmailSettings emailSettings = new EmailSettings
+EmailSettings EmailSettings = new EmailSettings
 {
     WriteAsFile = bool.Parse(builder.Configuration.GetSection("AppSettings:Email.WriteAsFile").Value ?? "false")
 };
 //builder.Services.AddTransient<IOrderProcessor, EmailOrderProcessor>();
 builder.Services.AddTransient<IOrderProcessor>(provider =>
-     new EmailOrderProcessor(emailSettings));
+     new EmailOrderProcessor(EmailSettings));
 
 //Payment Services
 builder.Services.AddTransient<IBraintreeService, BraintreeService>();

@@ -1,4 +1,5 @@
-﻿@using Eshop.Web.ReportModels
+﻿@using Eshop.Models.BusinessDomains
+@using Eshop.Web.ReportModels
 @using Eshop.Web.Models
 @addTagHelper*, Microsoft.AspNetCore.Mvc.TagHelpers
 
@@ -71,9 +72,9 @@
                 {
                     <tr>
                         <td style="width:120px;border: 1px solid #ccc">@product.Name</td>
-                        <td style="width:120px;border: 1px solid #ccc">@product.CURRENT_STOCK</td>
-                        <td style="width:120px;border: 1px solid #ccc">@product.Buying_Price</td>
-                        <td style="width:120px;border: 1px solid #ccc">@product.TOTAL_PRICE</td>
+                        <td style="width:120px;border: 1px solid #ccc">@product.CurrentStock</td>
+                        <td style="width:120px;border: 1px solid #ccc">@product.Price</td>
+                        <td style="width:120px;border: 1px solid #ccc">@product.TotalPrice</td>
                     </tr>
                 }
 
@@ -81,9 +82,9 @@
             <tfoot>
                 <tr>
                     <td class="text-right">Grand Total: &nbsp; @products.Count()</td>
-                    <td class="text-right">@products.Sum(x=>x.CURRENT_STOCK)</td>
+                    <td class="text-right">@products.Sum(x=>x.CurrentStock)</td>
                     <td class="text-right">@products.Sum(x=>x.Price)</td>              
-                    <td class="text-right">@products.Sum(x=>x.TOTAL_PRICE)</td>
+                    <td class="text-right">@products.Sum(x=>x.TotalPrice)</td>
                 </tr>
             </tfoot>
         </table>

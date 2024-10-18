@@ -7,6 +7,8 @@ using Eshop.Web.Models;
 using Eshop.Web.Models.ViewModels;
 using Eshop.Web.Common;
 using Eshop.Web.Interfaces;
+using Eshop.Models.BusinessDomains;
+using Eshop.Utils;
 
 namespace Eshop.Web.Controllers
 {
@@ -31,17 +33,17 @@ namespace Eshop.Web.Controllers
         public ActionResult AddToCart(Cart cart,int productId, string returnUrl)
         {
             //var cart = GetCart();
-            Product? product = context.Products.Include(c=>c.Category1).FirstOrDefault(p => p.ProductID == productId);
+            Product? product = context.Products.Include(c=>c.Category1).FirstOrDefault(p => p.AutoId == productId);
             if (product != null)
             {
                 try
                 {
-                    var _cart = cart.Lines.Where(x => x.Product.ProductID == product.ProductID).FirstOrDefault();
-                    if (_cart != null && _cart.Quantity >= product.CURRENT_STOCK)
+                    var _cart = cart.Lines.Where(x => x.Product.AutoId == product.AutoId).FirstOrDefault();
+                    if (_cart != null && _cart.Quantity >= product.CurrentStock)
                     {
                         TempData["Error"] = "Sorry! You can not add more than available stock.";
                     }
-                    else if(product.CURRENT_STOCK == 0)
+                    else if(product.CurrentStock == 0)
                     {
                         TempData["Error"] = "Sorry! This product is out of stock.";
                     }
@@ -75,7 +77,7 @@ namespace Eshop.Web.Controllers
         public RedirectToActionResult RemoveFromCart(Cart cart,int productId, string returnUrl)
         {
             //var cart = GetCart();
-            Product? product = context.Products.Include(c=>c.Category1).FirstOrDefault(p => p.ProductID == productId);
+            Product? product = context.Products.Include(c=>c.Category1).FirstOrDefault(p => p.AutoId == productId);
             if (product != null)
             {
                 try
@@ -120,8 +122,8 @@ namespace Eshop.Web.Controllers
             ShippingDetails shippingDetails = new()
             { 
                 IsConfirmed = false,
-                CREATE_BY = CurrentUserName,
-                CREATE_DATE = DateTime.Today
+                CreatedBy = CurrentUserName,
+                CreatedDate = DateTime.Today
             };
             if (cart.Lines.Count() == 0)
             {
@@ -145,15 +147,15 @@ namespace Eshop.Web.Controllers
                     await context.SaveChangesAsync();
                     foreach(var i in cart.Lines)
                     {
-                        shipmentOrders.AUTO_ID = null;
-                        shipmentOrders.ShippingDetailsId = shippingDetails.AUTO_ID;
-                        shipmentOrders.QUANTITY = i.Quantity;
-                        shipmentOrders.PRODUCT_NAME = i.Product.Name;
-                        shipmentOrders.PRODUCT_ID = i.Product.ProductID;
-                        shipmentOrders.CATEGORY_ID = i.Product.Cat_Id;
-                        shipmentOrders.PRICE = (float)(i.Product.Price * i.Quantity);
-                        shipmentOrders.CREATE_BY = shippingDetails.CREATE_BY;
-                        shipmentOrders.CREATE_DATE = shippingDetails.CREATE_DATE;
+                        shipmentOrders.AutoId = null;
+                        shipmentOrders.ShippingDetailsId = shippingDetails.AutoId;
+                        shipmentOrders.Quantity = i.Quantity;
+                        shipmentOrders.ProductName = i.Product.Name;
+                        shipmentOrders.ProductId = i.Product.AutoId;
+                        shipmentOrders.CategoryId = i.Product.Cat_Id;
+                        shipmentOrders.Price = (float)(i.Product.Price * i.Quantity);
+                        shipmentOrders.CreatedBy = shippingDetails.CreatedBy;
+                        shipmentOrders.CreatedDate = shippingDetails.CreatedDate;
 
                         await context.ShipmentOrders.AddAsync(shipmentOrders);
                         await context.SaveChangesAsync();

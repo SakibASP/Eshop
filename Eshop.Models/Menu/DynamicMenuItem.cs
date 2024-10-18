@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Eshop.Web.Models
+namespace Eshop.Models.Menu
 {
     [Table("DynamicMenuItem")]
     public class DynamicMenuItem

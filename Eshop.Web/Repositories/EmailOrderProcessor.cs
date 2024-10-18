@@ -1,9 +1,10 @@
-﻿using Eshop.Web.Common;
+﻿using Eshop.Utils;
 using Eshop.Web.Interfaces;
 using Eshop.Web.Models;
 using System.Net.Mail;
 using System.Net;
 using System.Text;
+using Eshop.Models.BusinessDomains;
 
 namespace Eshop.Web.Repositories
 {
@@ -20,10 +21,10 @@ namespace Eshop.Web.Repositories
                 smtpClient.UseDefaultCredentials = false;
                 smtpClient.Credentials = new NetworkCredential(settings.Username, settings.Password);
 
-                //if (emailSettings.WriteAsFile)
+                //if (EmailSettings.WriteAsFile)
                 //{
                 //    smtpClient.DeliveryMethod = SmtpDeliveryMethod.SpecifiedPickupDirectory;
-                //    smtpClient.PickupDirectoryLocation = emailSettings.FileLocation;
+                //    smtpClient.PickupDirectoryLocation = EmailSettings.FileLocation;
                 //    smtpClient.EnableSsl = false;
                 //}
                 StringBuilder body = new StringBuilder()
@@ -41,18 +42,18 @@ namespace Eshop.Web.Repositories
                 body.AppendFormat("Total order value: {0:c}", cart.ComputeTotalValue())
                                                             .AppendLine("---")
                                                             .AppendLine("Ship to:")
-                                                            .AppendLine(shippingInfo.NAME)
-                                                            .AppendLine(shippingInfo.LINE_1)
-                                                            .AppendLine(shippingInfo.LINE_2 ?? "")
-                                                            .AppendLine(shippingInfo.LINE_3 ?? "")
-                                                            .AppendLine(shippingInfo.CITY)
-                                                            .AppendLine(shippingInfo.STATE)
-                                                            .AppendLine(shippingInfo.COUNTRY)
-                                                            .AppendLine(shippingInfo.ZIP ?? "")
+                                                            .AppendLine(shippingInfo.Name)
+                                                            .AppendLine(shippingInfo.Line1)
+                                                            .AppendLine(shippingInfo.Line2 ?? "")
+                                                            .AppendLine(shippingInfo.Line3 ?? "")
+                                                            .AppendLine(shippingInfo.City)
+                                                            .AppendLine(shippingInfo.State)
+                                                            .AppendLine(shippingInfo.Country)
+                                                            .AppendLine(shippingInfo.Zip ?? "")
                                                             .AppendLine("---")
-                                                            .AppendFormat("Gift wrap: {0}", shippingInfo.GIFTWRAP ? "Yes" : "No");
+                                                            .AppendFormat("Gift wrap: {0}", shippingInfo.Giftwrap ? "Yes" : "No");
                 MailMessage mailMessage = new(settings.MailFromAddress, //From
-                                            shippingInfo.EMAIL!, //To
+                                            shippingInfo.Email!, //To
                                             "New order submitted!", //Subject
                                             body.ToString() // Body
                                             );

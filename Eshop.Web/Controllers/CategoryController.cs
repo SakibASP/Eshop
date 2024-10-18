@@ -9,6 +9,7 @@ using Microsoft.EntityFrameworkCore;
 using Eshop.Web.Common;
 using Eshop.Web.Data;
 using Eshop.Web.Models;
+using Eshop.Models.BusinessDomains;
 
 namespace Eshop.Web.Controllers
 {
@@ -39,7 +40,7 @@ namespace Eshop.Web.Controllers
             }
 
             var category = await _context.Category
-                .FirstOrDefaultAsync(m => m.AUTO_ID == id);
+                .FirstOrDefaultAsync(m => m.AutoId == id);
             if (category == null)
             {
                 return NotFound();
@@ -59,12 +60,12 @@ namespace Eshop.Web.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("AUTO_ID,CategoryName,CREATED_BY,CREATED_DATE")] Category category)
+        public async Task<IActionResult> Create(Category category)
         {
             if (ModelState.IsValid)
             {
-                category.CREATED_BY = CurrentUserName;
-                category.CREATED_DATE = DateTime.Now;
+                category.CreatedBy = CurrentUserName;
+                category.CreatedDate = DateTime.Now;
 
                 _context.Add(category);
                 await _context.SaveChangesAsync();
@@ -96,9 +97,9 @@ namespace Eshop.Web.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("AUTO_ID,CategoryName,CREATED_BY,CREATED_DATE")] Category category)
+        public async Task<IActionResult> Edit(int id, [Bind("AutoId,CategoryName,CreatedBy,CreatedDate")] Category category)
         {
-            if (id != category.AUTO_ID)
+            if (id != category.AutoId)
             {
                 return NotFound();
             }
@@ -109,8 +110,8 @@ namespace Eshop.Web.Controllers
                 {
                     try
                     {
-                        category.CREATED_BY = CurrentUserName;
-                        category.CREATED_DATE = DateTime.Now;
+                        category.CreatedBy = CurrentUserName;
+                        category.CreatedDate = DateTime.Now;
 
                         _context.Update(category);
                         await _context.SaveChangesAsync();
@@ -119,7 +120,7 @@ namespace Eshop.Web.Controllers
                     }
                     catch (DbUpdateConcurrencyException)
                     {
-                        if (!CategoryExists(category.AUTO_ID))
+                        if (!CategoryExists(category.AutoId))
                         {
                             return NotFound();
                         }
@@ -147,7 +148,7 @@ namespace Eshop.Web.Controllers
             }
 
             var category = await _context.Category
-                .FirstOrDefaultAsync(m => m.AUTO_ID == id);
+                .FirstOrDefaultAsync(m => m.AutoId == id);
             if (category == null)
             {
                 return NotFound();
@@ -183,7 +184,7 @@ namespace Eshop.Web.Controllers
 
         private bool CategoryExists(int id)
         {
-          return (_context.Category?.Any(e => e.AUTO_ID == id)).GetValueOrDefault();
+          return (_context.Category?.Any(e => e.AutoId == id)).GetValueOrDefault();
         }
         protected override void Dispose(bool disposing)
         {

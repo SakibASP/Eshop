@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Eshop.Models.BusinessDomains;
+using Microsoft.AspNetCore.Mvc;
 //using Eshop.Web.Binder;
 
 namespace Eshop.Web.Models
@@ -11,7 +12,7 @@ namespace Eshop.Web.Models
         //adding items to ta cart list
         public void AddItem(Product product, int quantity)
         {
-            var line = lineCollection.Where(p => p.Product.ProductID == product.ProductID).FirstOrDefault();
+            var line = lineCollection.Where(p => p.Product.AutoId == product.AutoId).FirstOrDefault();
             if (line == null)
             {
                 lineCollection.Add(new CartLine { Product = product, Quantity = quantity });
@@ -24,7 +25,7 @@ namespace Eshop.Web.Models
         //removing items from the cart list
         public void RemoveLine(Product product)
         {
-            lineCollection.RemoveAll(l => l.Product.ProductID == product.ProductID);
+            lineCollection.RemoveAll(l => l.Product.AutoId == product.AutoId);
         }
         public double ComputeTotalValue()
         {

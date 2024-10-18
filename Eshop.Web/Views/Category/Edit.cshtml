@@ -1,4 +1,4 @@
-﻿@model Eshop.Web.Models.Category
+﻿@model Eshop.Models.BusinessDomains.Category
 
 @{
     ViewData["Title"] = "Edit";
@@ -12,7 +12,7 @@
     <div class="col-md-4">
         <form asp-action="Edit">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="AUTO_ID" />
+            <input type="hidden" asp-for="AutoId" />
             <div class="form-group">
                 <label asp-for="CategoryName" class="control-label"></label>
                 <input asp-for="CategoryName" class="form-control" />

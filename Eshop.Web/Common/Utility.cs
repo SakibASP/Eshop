@@ -11,6 +11,9 @@ using Eshop.Web.Common;
 using Eshop.Web.Data;
 using Eshop.Web.Models;
 using Eshop.Web.Models.ViewModels;
+using Eshop.Models.BusinessDomains;
+using Eshop.ViewModels.BusinessDomains;
+using Eshop.Utils;
 
 namespace Eshop.Web.Common
 {
@@ -85,25 +88,24 @@ namespace Eshop.Web.Common
         public static List<ProductViewModel> GetProducts2(ApplicationDbContext _context)
         {
             var myprod = (from e in _context.Products
-                          join c in _context.Category on e.Cat_Id equals c.AUTO_ID
+                          join c in _context.Category on e.Cat_Id equals c.AutoId
                           join d in _context.ProductImages
-                          on e.ProductID equals d.ProductID into prodDept
+                          on e.AutoId equals d.ProductID into prodDept
                           from ed in prodDept.DefaultIfEmpty()
                           select new ProductViewModel
                           {
                               ProductID = ed.ProductID,
                               //ImageData = ed.ImageData,
                               ImageName = ed.ImageName,
-                              CREATED_BY = ed.CREATED_BY,
-                              CREATED_DATE = ed.CREATED_DATE,
-                              CURRENT_STOCK = e.CURRENT_STOCK,
+                              CreatedBy = ed.CreatedBy,
+                              CreatedDate = ed.CreatedDate,
+                              CurrentStock = e.CurrentStock,
                               Cat_Id = e.Cat_Id,
                               Category = c.CategoryName,
                               IsCover = ed.IsCover,
                               IsAvailabe = e.IsAvailabe,
                               Name = e.Name,
-                              ProductImageID = ed.AUTO_ID,
-                              Buying_Price = e.Buying_Price,
+                              ProductImageID = ed.AutoId,
                               Price = e.Price,
                               Description = e.Description,
                               ShortDesc = Utility.TruncateDescription(e.Description, 10),
@@ -120,10 +122,10 @@ namespace Eshop.Web.Common
         public static void GetProductStock(out decimal? SoccerPercentage, out decimal? WatersportsPercentage, out decimal? ChessPercentage, out decimal? CricketPercentage, ApplicationDbContext _context)
         {
             var Products = Convert.ToDecimal(_context.Products.Count());
-            var Soccer = Convert.ToDecimal(_context.Products.Where(p => p.Cat_Id == 1).Sum(x=>x.CURRENT_STOCK));
-            var Watersports = Convert.ToDecimal(_context.Products.Where(p => p.Cat_Id == 2).Sum(x => x.CURRENT_STOCK));
-            var Chess = Convert.ToDecimal(_context.Products.Where(p => p.Cat_Id == 3).Sum(x => x.CURRENT_STOCK));
-            var Cricket = Convert.ToDecimal(_context.Products.Where(p => p.Cat_Id == 4).Sum(x => x.CURRENT_STOCK));
+            var Soccer = Convert.ToDecimal(_context.Products.Where(p => p.Cat_Id == 1).Sum(x=>x.CurrentStock));
+            var Watersports = Convert.ToDecimal(_context.Products.Where(p => p.Cat_Id == 2).Sum(x => x.CurrentStock));
+            var Chess = Convert.ToDecimal(_context.Products.Where(p => p.Cat_Id == 3).Sum(x => x.CurrentStock));
+            var Cricket = Convert.ToDecimal(_context.Products.Where(p => p.Cat_Id == 4).Sum(x => x.CurrentStock));
 
             SoccerPercentage = (Soccer / Products) * 100;
             WatersportsPercentage = (Watersports / Products) * 100;

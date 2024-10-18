@@ -1,4 +1,4 @@
-﻿namespace Eshop.Web.Models.ViewModels
+﻿namespace Eshop.ViewModels.Users
 {
     public class ManageUserRolesViewModel
     {

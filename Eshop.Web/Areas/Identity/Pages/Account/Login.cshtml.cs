@@ -87,11 +87,11 @@ namespace Eshop.Web.Areas.Identity.Pages.Account
             [Display(Name = "Remember me?")]
             public bool RememberMe { get; set; }
         }
-        public bool IsValidEmail(string emailaddress)
+        public bool IsValidEmail(string Emailaddress)
         {
             try
             {
-                MailAddress m = new MailAddress(emailaddress);
+                MailAddress m = new MailAddress(Emailaddress);
                 return true;
             }
             catch (FormatException)

@@ -2,19 +2,19 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Eshop.Web.Models
+namespace Eshop.Models.BusinessDomains
 {
     [Table("Categories")]
     public class Category
     {
         [Key]
-        public int AUTO_ID { get; set; }
+        public int AutoId { get; set; }
 
         [DisplayName("Category")]
         [Required(ErrorMessage = "Please specify a category")]
         public string? CategoryName { get; set; }
-        public string? CREATED_BY { get; set; }
-        public DateTime? CREATED_DATE { get; set; }
+        public string? CreatedBy { get; set; }
+        public DateTime? CreatedDate { get; set; }
         //public virtual Product? Products { get; set; }
     }
 }

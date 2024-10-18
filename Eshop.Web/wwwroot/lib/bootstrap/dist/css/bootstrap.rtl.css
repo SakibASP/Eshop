@@ -433,7 +433,7 @@ legend + * {
 
 [type="tel"],
 [type="url"],
-[type="email"],
+[type="Email"],
 [type="number"] {
   direction: ltr;
 }

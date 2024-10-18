@@ -32,9 +32,9 @@ namespace Eshop.Web.Areas.Identity.Pages.Account
         [TempData]
         public string StatusMessage { get; set; }
 
-        public async Task<IActionResult> OnGetAsync(string userId, string email, string code)
+        public async Task<IActionResult> OnGetAsync(string userId, string Email, string code)
         {
-            if (userId == null || email == null || code == null)
+            if (userId == null || Email == null || code == null)
             {
                 return RedirectToPage("/Index");
             }
@@ -46,16 +46,16 @@ namespace Eshop.Web.Areas.Identity.Pages.Account
             }
 
             code = Encoding.UTF8.GetString(WebEncoders.Base64UrlDecode(code));
-            var result = await _userManager.ChangeEmailAsync(user, email, code);
+            var result = await _userManager.ChangeEmailAsync(user, Email, code);
             if (!result.Succeeded)
             {
-                StatusMessage = "Error changing email.";
+                StatusMessage = "Error changing Email.";
                 return Page();
             }
 
-            // In our UI email and user name are one and the same, so when we update the email
+            // In our UI Email and user name are one and the same, so when we update the Email
             // we need to update the user name.
-            var setUserNameResult = await _userManager.SetUserNameAsync(user, email);
+            var setUserNameResult = await _userManager.SetUserNameAsync(user, Email);
             if (!setUserNameResult.Succeeded)
             {
                 StatusMessage = "Error changing user name.";
@@ -63,7 +63,7 @@ namespace Eshop.Web.Areas.Identity.Pages.Account
             }
 
             await _signInManager.RefreshSignInAsync(user);
-            StatusMessage = "Thank you for confirming your email change.";
+            StatusMessage = "Thank you for confirming your Email change.";
             return Page();
         }
     }

@@ -1,4 +1,4 @@
-﻿@model IEnumerable<Eshop.Web.Models.ShippingDetails>
+﻿@model IEnumerable<Eshop.Models.BusinessDomains.ShippingDetails>
 
 @{
     ViewData["Title"] = "Index";
@@ -14,37 +14,37 @@
             <thead>
                 <tr>
                     <th>
-                        @Html.DisplayNameFor(model => model.NAME)
+                        @Html.DisplayNameFor(model => model.Name)
                     </th>
                     <th>
-                        @Html.DisplayNameFor(model => model.MOBLIE_NUMBER)
+                        @Html.DisplayNameFor(model => model.MobileNumber)
                     </th>
                     <th>
-                        @Html.DisplayNameFor(model => model.EMAIL)
+                        @Html.DisplayNameFor(model => model.Email)
                     </th>
                     <th>
-                        @Html.DisplayNameFor(model => model.LINE_1)
+                        @Html.DisplayNameFor(model => model.Line1)
                     </th>
                     <th>
-                        @Html.DisplayNameFor(model => model.LINE_2)
+                        @Html.DisplayNameFor(model => model.Line2)
                     </th>
                     <th>
-                        @Html.DisplayNameFor(model => model.LINE_3)
+                        @Html.DisplayNameFor(model => model.Line3)
                     </th>
                     <th>
-                        @Html.DisplayNameFor(model => model.CITY)
+                        @Html.DisplayNameFor(model => model.City)
                     </th>
                     <th>
-                        @Html.DisplayNameFor(model => model.STATE)
+                        @Html.DisplayNameFor(model => model.State)
                     </th>
                     <th>
-                        @Html.DisplayNameFor(model => model.ZIP)
+                        @Html.DisplayNameFor(model => model.Zip)
                     </th>
                     <th>
-                        @Html.DisplayNameFor(model => model.COUNTRY)
+                        @Html.DisplayNameFor(model => model.Country)
                     </th>
                     <th>
-                        @Html.DisplayNameFor(model => model.GIFTWRAP)
+                        @Html.DisplayNameFor(model => model.Giftwrap)
                     </th>
 
                     <th></th>
@@ -53,44 +53,44 @@
             <tbody>
                 @foreach (var item in Model)
                 {
-                    string GiftWrap = item.GIFTWRAP == true ? "Yes" : "No";
+                    string GiftWrap = item.Giftwrap == true ? "Yes" : "No";
                     <tr>
                         <td>
-                            @Html.DisplayFor(modelItem => item.NAME)
+                            @Html.DisplayFor(modelItem => item.Name)
                         </td>
                         <td>
-                            @Html.DisplayFor(modelItem => item.MOBLIE_NUMBER)
+                            @Html.DisplayFor(modelItem => item.MobileNumber)
                         </td>
                         <td>
-                            @Html.DisplayFor(modelItem => item.EMAIL)
+                            @Html.DisplayFor(modelItem => item.Email)
                         </td>
                         <td>
-                            @Html.DisplayFor(modelItem => item.LINE_1)
+                            @Html.DisplayFor(modelItem => item.Line1)
                         </td>
                         <td>
-                            @Html.DisplayFor(modelItem => item.LINE_2)
+                            @Html.DisplayFor(modelItem => item.Line2)
                         </td>
                         <td>
-                            @Html.DisplayFor(modelItem => item.LINE_3)
+                            @Html.DisplayFor(modelItem => item.Line3)
                         </td>
                         <td>
-                            @Html.DisplayFor(modelItem => item.CITY)
+                            @Html.DisplayFor(modelItem => item.City)
                         </td>
                         <td>
-                            @Html.DisplayFor(modelItem => item.STATE)
+                            @Html.DisplayFor(modelItem => item.State)
                         </td>
                         <td>
-                            @Html.DisplayFor(modelItem => item.ZIP)
+                            @Html.DisplayFor(modelItem => item.Zip)
                         </td>
                         <td>
-                            @Html.DisplayFor(modelItem => item.COUNTRY)
+                            @Html.DisplayFor(modelItem => item.Country)
                         </td>
                         <td>
                             @GiftWrap
                         </td>
                         <td>
-                            @*<a asp-action="Edit" asp-route-id="@item.AUTO_ID">Edit</a> |*@
-                            <a asp-action="Details" asp-route-id="@item.AUTO_ID" class="btn btn-info">View</a>
+                            @*<a asp-action="Edit" asp-route-id="@item.AutoId">Edit</a> |*@
+                            <a asp-action="Details" asp-route-id="@item.AutoId" class="btn btn-info">View</a>
                         </td>
                     </tr>
                 }

@@ -1,4 +1,4 @@
-﻿@model Eshop.Web.Models.ShippingDetails
+﻿@model Eshop.Models.BusinessDomains.ShippingDetails
 
 @{
     ViewData["Title"] = "Delete";
@@ -13,58 +13,58 @@
     <hr />
     <dl class="row">
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.NAME)
+            @Html.DisplayNameFor(model => model.Name)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.NAME)
+            @Html.DisplayFor(model => model.Name)
         </dd>
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.LINE_1)
+            @Html.DisplayNameFor(model => model.Line1)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.LINE_1)
+            @Html.DisplayFor(model => model.Line1)
         </dd>
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.LINE_2)
+            @Html.DisplayNameFor(model => model.Line2)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.LINE_2)
+            @Html.DisplayFor(model => model.Line2)
         </dd>
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.LINE_3)
+            @Html.DisplayNameFor(model => model.Line3)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.LINE_3)
+            @Html.DisplayFor(model => model.Line3)
         </dd>
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.CITY)
+            @Html.DisplayNameFor(model => model.City)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.CITY)
+            @Html.DisplayFor(model => model.City)
         </dd>
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.STATE)
+            @Html.DisplayNameFor(model => model.State)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.STATE)
+            @Html.DisplayFor(model => model.State)
         </dd>
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.ZIP)
+            @Html.DisplayNameFor(model => model.Zip)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.ZIP)
+            @Html.DisplayFor(model => model.Zip)
         </dd>
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.COUNTRY)
+            @Html.DisplayNameFor(model => model.Country)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.COUNTRY)
+            @Html.DisplayFor(model => model.Country)
         </dd>
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.GIFTWRAP)
+            @Html.DisplayNameFor(model => model.Giftwrap)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.GIFTWRAP)
+            @Html.DisplayFor(model => model.Giftwrap)
         </dd>
         <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.IsConfirmed)
@@ -75,7 +75,7 @@
     </dl>
     
     <form asp-action="Delete">
-        <input type="hidden" asp-for="AUTO_ID" />
+        <input type="hidden" asp-for="AutoId" />
         <input type="submit" value="Delete" class="btn btn-danger" /> |
         <a asp-action="Index">Back to List</a>
     </form>

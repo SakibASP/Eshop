@@ -6121,7 +6121,7 @@ readers do not read off random characters that represent icons */
 .fa-viruses::before {
   content: "\e076"; }
 
-.fa-voicemail::before {
+.fa-voicEmail::before {
   content: "\f897"; }
 
 .fa-volcano::before {

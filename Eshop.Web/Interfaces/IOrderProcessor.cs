@@ -1,4 +1,5 @@
-﻿using Eshop.Web.Models;
+﻿using Eshop.Models.BusinessDomains;
+using Eshop.Web.Models;
 
 namespace Eshop.Web.Interfaces
 {

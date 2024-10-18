@@ -77,13 +77,13 @@ namespace Eshop.Web.Data.Migrations
             //    name: "Categories",
             //    columns: table => new
             //    {
-            //        AUTO_ID = table.Column<int>(type: "int", nullable: false)
+            //        AutoId = table.Column<int>(type: "int", nullable: false)
             //            .Annotation("SqlServer:Identity", "1, 1"),
             //        CategoryName = table.Column<string>(type: "nvarchar(max)", nullable: false)
             //    },
             //    constraints: table =>
             //    {
-            //        table.PrimaryKey("PK_Categories", x => x.AUTO_ID);
+            //        table.PrimaryKey("PK_Categories", x => x.AutoId);
             //    });
 
             //    migrationBuilder.CreateTable(
@@ -106,7 +106,7 @@ namespace Eshop.Web.Data.Migrations
             //                name: "FK_Products_Categories_Cat_Id",
             //                column: x => x.Cat_Id,
             //                principalTable: "Categories",
-            //                principalColumn: "AUTO_ID");
+            //                principalColumn: "AutoId");
             //        });
 
             //migrationBuilder.CreateIndex(

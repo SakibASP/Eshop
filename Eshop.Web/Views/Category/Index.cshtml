@@ -1,4 +1,4 @@
-﻿@model IEnumerable<Eshop.Web.Models.Category>
+﻿@model IEnumerable<Eshop.Models.BusinessDomains.Category>
 
 @{
     ViewData["Title"] = "Index";
@@ -26,9 +26,9 @@
                 @Html.DisplayFor(modelItem => item.CategoryName)
             </td>
             <td>
-                <a asp-action="Edit" asp-route-id="@item.AUTO_ID" class="btn btn-success">Edit</a> 
-                <a asp-action="Details" asp-route-id="@item.AUTO_ID" class="btn btn-primary">Details</a> 
-                <a asp-action="Delete" asp-route-id="@item.AUTO_ID" class="btn btn-danger">Delete</a>
+                <a asp-action="Edit" asp-route-id="@item.AutoId" class="btn btn-success">Edit</a> 
+                <a asp-action="Details" asp-route-id="@item.AutoId" class="btn btn-primary">Details</a> 
+                <a asp-action="Delete" asp-route-id="@item.AutoId" class="btn btn-danger">Delete</a>
             </td>
         </tr>
 }

@@ -1,4 +1,4 @@
-﻿@model Eshop.Web.Models.ShippingDetails
+﻿@model Eshop.Models.BusinessDomains.ShippingDetails
 
 @{
     ViewBag.Title = "Eshop.Web: Checkout";
@@ -10,12 +10,12 @@
 @using (Html.BeginForm())
 {
     @Html.ValidationSummary()
-    @Html.HiddenFor(x=>x.CREATE_BY)
-    @Html.HiddenFor(x=>x.CREATE_DATE)
+    @Html.HiddenFor(x=>x.CreatedBy)
+    @Html.HiddenFor(x=>x.CreatedDate)
     <h3>Ship to</h3>
     <div class="form-group">
         <label>Name:</label>
-        @Html.TextBoxFor(x => x.NAME, new { @class = " form-control " })
+        @Html.TextBoxFor(x => x.Name, new { @class = " form-control " })
     </div>
 
     <h3>Address</h3>
@@ -51,7 +51,7 @@
 
     foreach ( var property in ViewData.ModelMetadata.Properties)
                 {
-        if (property.PropertyName != "NAME" && property.PropertyName != "GIFTWRAP" && property.PropertyName != "AUTO_ID" && property.PropertyName != "IsConfirmed" && property.PropertyName != "CREATE_BY" && property.PropertyName != "CREATE_DATE" && property.PropertyName != "CONFIRM_BY" && property.PropertyName != "CONFIRM_DATE")
+        if (property.PropertyName != "NAME" && property.PropertyName != "GIFTWRAP" && property.PropertyName != "AutoId" && property.PropertyName != "IsConfirmed" && property.PropertyName != "CreatedBy" && property.PropertyName != "CreatedDate" && property.PropertyName != "CONFIRM_BY" && property.PropertyName != "CONFIRM_DATE")
                     {
                         <div class="form-group">
                             <label>@(property.DisplayName ?? property.PropertyName)</label>
@@ -63,7 +63,7 @@
     <h3>Options</h3>
     <div class="checkbox">
         <label>
-            @Html.CheckBoxFor(x=>x.GIFTWRAP, htmlAttributes: new {  @class="form-check-input" })
+            @Html.CheckBoxFor(x=>x.Giftwrap, htmlAttributes: new {  @class="form-check-input" })
             Gift wrap this items
         </label>
     </div>

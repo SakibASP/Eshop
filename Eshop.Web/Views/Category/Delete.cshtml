@@ -1,4 +1,4 @@
-﻿@model Eshop.Web.Models.Category
+﻿@model Eshop.Models.BusinessDomains.Category
 
 @{
     ViewData["Title"] = "Delete";
@@ -20,7 +20,7 @@
     </dl>
     
     <form asp-action="Delete">
-        <input type="hidden" asp-for="AUTO_ID" />
+        <input type="hidden" asp-for="AutoId" />
         <input type="submit" value="Delete" class="btn btn-danger" /> |
         <a asp-action="Index">Back to List</a>
     </form>

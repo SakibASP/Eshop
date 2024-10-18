@@ -1,11 +1,8 @@
-﻿namespace Eshop.Web.Models
-{
-    using Microsoft.EntityFrameworkCore.Metadata.Internal;
-    using System;
-    using System.Collections.Generic;
-    using System.ComponentModel.DataAnnotations;
-    using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
+namespace Eshop.Models.Menu
+{
     [Table("MenuToRole")]
     public partial class MenuToRole
     {
@@ -17,3 +14,4 @@
         public Nullable<bool> IsSelected { get; set; }
     }
 }
+

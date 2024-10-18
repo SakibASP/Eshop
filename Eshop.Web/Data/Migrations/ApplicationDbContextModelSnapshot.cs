@@ -234,22 +234,22 @@ namespace Eshop.Web.Data.Migrations
 
             modelBuilder.Entity("Eshop.Web.Models.Category", b =>
                 {
-                    b.Property<int>("AUTO_ID")
+                    b.Property<int>("AutoId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("AUTO_ID"), 1L, 1);
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("AutoId"), 1L, 1);
 
                     b.Property<string>("CategoryName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("AUTO_ID");
+                    b.HasKey("AutoId");
 
                     b.ToTable("Categories");
                 });
 
-            modelBuilder.Entity("Eshop.Web.Models.Product", b =>
+            modelBuilder.Entity("Eshop.Models.BusinessDomains.Product", b =>
                 {
                     b.Property<int>("ProductID")
                         .ValueGeneratedOnAdd()
@@ -335,7 +335,7 @@ namespace Eshop.Web.Data.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Eshop.Web.Models.Product", b =>
+            modelBuilder.Entity("Eshop.Models.BusinessDomains.Product", b =>
                 {
                     b.HasOne("Eshop.Web.Models.Category", "Category1")
                         .WithMany()

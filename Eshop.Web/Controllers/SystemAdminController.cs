@@ -10,6 +10,9 @@ using Eshop.Web.Helper;
 using Eshop.Web.Models;
 using Eshop.Web.Models.ViewModels;
 using X.PagedList;
+using Eshop.Models.BusinessDomains;
+using Eshop.ViewModels.BusinessDomains;
+using Eshop.Utils;
 //using X.PagedList;
 
 namespace Eshop.Web.Controllers
@@ -59,7 +62,7 @@ namespace Eshop.Web.Controllers
             int pageSize = 6;
             int pageNumber = (page ?? 1);
 
-            ViewData["Cat_Id"] = new SelectList(_context.Category.AsNoTracking(), "AUTO_ID", "CategoryName");
+            ViewData["Cat_Id"] = new SelectList(_context.Category.AsNoTracking(), "AutoId", "CategoryName");
             //return View(products.ToPagedList(pageNumber, pageSize));
             var product_ = products.AsQueryable().AsNoTracking();
             return View(PaginatedList<Product>.CreateAsync(product_, pageNumber, pageSize));
@@ -160,7 +163,7 @@ namespace Eshop.Web.Controllers
                 if (img is not null && pRODUCT is not null)
                 {
                     var catName = _context.Category.Find(pRODUCT.Cat_Id)?.CategoryName ?? "Anonymous";
-                    string? imagePath = catName + "/" + GetImageNameWithExtension(img.FileName, pRODUCT.Name + "_" + pRODUCT.ProductID);
+                    string? imagePath = catName + "/" + GetImageNameWithExtension(img.FileName, pRODUCT.Name + "_" + pRODUCT.AutoId);
                     string? filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", imagePath);
 
                     // Check if the directory exists; if not, create it
@@ -174,9 +177,9 @@ namespace Eshop.Web.Controllers
 
                     productImages.ProductID = ProductID;
                     productImages.IsCover = isCover;
-                    productImages.CREATED_BY = CurrentUserName;
-                    productImages.CREATED_DATE = DateTime.Now;
-                    productImages.ImageName = GetImageNameWithExtension(img.FileName, pRODUCT.Name + "_" + pRODUCT.ProductID);
+                    productImages.CreatedBy = CurrentUserName;
+                    productImages.CreatedDate = DateTime.Now;
+                    productImages.ImageName = GetImageNameWithExtension(img.FileName, pRODUCT.Name + "_" + pRODUCT.AutoId);
                     productImages.ImagePath = imagePath;
 
                     _context.Add(productImages);
@@ -212,7 +215,7 @@ namespace Eshop.Web.Controllers
         // GET: SystemAdmin/Create
         public IActionResult Create()
         {
-            ViewData["Cat_Id"] = new SelectList(_context.Category, "AUTO_ID", "CategoryName");
+            ViewData["Cat_Id"] = new SelectList(_context.Category, "AutoId", "CategoryName");
             return View();
         }
 
@@ -221,7 +224,7 @@ namespace Eshop.Web.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ProductID,Name,Description,Price,Buying_Price,ImageData,ImageName,CREATED_BY,CREATED_DATE,CURRENT_STOCK,Cat_Id,IsAvailabe,Category1")] Product product)
+        public async Task<IActionResult> Create([Bind("ProductID,Name,Description,Price,Buying_Price,ImageData,ImageName,CreatedBy,CreatedDate,CurrentStock,Cat_Id,IsAvailabe,Category1")] Product product)
         { 
             if (ModelState.IsValid)
             {
@@ -232,16 +235,16 @@ namespace Eshop.Web.Controllers
                     {
                         product.ImageName = imgFile.FileName;
                     }
-                    product.CREATED_BY = CurrentUserName;
-                    product.CREATED_DATE = DateTime.Now;
-                    if (product.CURRENT_STOCK > 0)
+                    product.CreatedBy = CurrentUserName;
+                    product.CreatedDate = DateTime.Now;
+                    if (product.CurrentStock > 0)
                     {
                         product.IsAvailabe = true;
                     }
 
                     _context.Add(product);
                     await _context.SaveChangesAsync();
-                    await AddImages(product.ProductID, 1);
+                    await AddImages(product.AutoId, 1);
 
                     HttpContext.Session.Remove(Constant.PRODUCTS_LIST);
                     HttpContext.Session.Remove(Constant.TOTAL_PRODUCTS_LIST);
@@ -253,7 +256,7 @@ namespace Eshop.Web.Controllers
                     TempData["Error"] = "Failed! Something went wrong. Alert : "+ex.Message;
                 }
             }
-            ViewData["Cat_Id"] = new SelectList(_context.Category, "AUTO_ID", "CategoryName", product.Cat_Id);
+            ViewData["Cat_Id"] = new SelectList(_context.Category, "AutoId", "CategoryName", product.Cat_Id);
             return View(product);
         }
 
@@ -269,7 +272,7 @@ namespace Eshop.Web.Controllers
             {
                 return NotFound();
             }
-            ViewData["Cat_Id"] = new SelectList(_context.Category, "AUTO_ID", "CategoryName", product.Cat_Id);
+            ViewData["Cat_Id"] = new SelectList(_context.Category, "AutoId", "CategoryName", product.Cat_Id);
             return View(product);
         }
 
@@ -278,13 +281,13 @@ namespace Eshop.Web.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ProductID,Name,Description,Price,Buying_Price,ImageData,ImageName,CREATED_BY,CREATED_DATE,CURRENT_STOCK,Cat_Id,IsAvailabe,Category1")] Product product)
+        public async Task<IActionResult> Edit(int id, [Bind("ProductID,Name,Description,Price,Buying_Price,ImageData,ImageName,CreatedBy,CreatedDate,CurrentStock,Cat_Id,IsAvailabe,Category1")] Product product)
         {
             if (ModelState.IsValid)
             {
                 try
                 {
-                    if (id != product.ProductID)
+                    if (id != product.AutoId)
                     {
                         return NotFound();
                     }                  
@@ -293,7 +296,7 @@ namespace Eshop.Web.Controllers
                     {
                         product.ImageName = img_file.FileName;
                     }
-                    if (product.CURRENT_STOCK > 0)
+                    if (product.CurrentStock > 0)
                     {
                         product.IsAvailabe = true;
                     }
@@ -311,7 +314,7 @@ namespace Eshop.Web.Controllers
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!ProductExists(product.ProductID))
+                    if (!ProductExists(product.AutoId))
                     {
                         return NotFound();
                     }
@@ -322,7 +325,7 @@ namespace Eshop.Web.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["Cat_Id"] = new SelectList(_context.Category, "AUTO_ID", "CategoryName", product.Cat_Id);
+            ViewData["Cat_Id"] = new SelectList(_context.Category, "AutoId", "CategoryName", product.Cat_Id);
             return View(product);
         }
         // GET: SystemAdmin/Delete/5
@@ -335,7 +338,7 @@ namespace Eshop.Web.Controllers
 
             var product = await _context.Products
                 .Include(p => p.Category1)
-                .FirstOrDefaultAsync(m => m.ProductID == id);
+                .FirstOrDefaultAsync(m => m.AutoId == id);
             if (product == null)
             {
                 return NotFound();
@@ -359,7 +362,7 @@ namespace Eshop.Web.Controllers
                 var productImages = _context.ProductImages.Where(m => m.ProductID == id).ToList();
                 if (!User.IsInRole("SuperAdmin"))
                 {
-                    if (product.CURRENT_STOCK > 0)
+                    if (product.CurrentStock > 0)
                     {
                         TempData["Error"] = "Sorry! This product is in stock. Please contact with Super Admin";
                     }
@@ -390,7 +393,7 @@ namespace Eshop.Web.Controllers
 
         private bool ProductExists(int id)
         {
-            return (_context.Products?.Any(e => e.ProductID == id)).GetValueOrDefault();
+            return (_context.Products?.Any(e => e.AutoId == id)).GetValueOrDefault();
         }
         protected override void Dispose(bool disposing)
         {

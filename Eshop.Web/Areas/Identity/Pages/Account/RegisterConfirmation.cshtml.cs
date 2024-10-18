@@ -45,22 +45,22 @@ namespace Eshop.Web.Areas.Identity.Pages.Account
         /// </summary>
         public string EmailConfirmationUrl { get; set; }
 
-        public async Task<IActionResult> OnGetAsync(string email, string returnUrl = null)
+        public async Task<IActionResult> OnGetAsync(string Email, string returnUrl = null)
         {
-            if (email == null)
+            if (Email == null)
             {
                 return RedirectToPage("/Index");
             }
             returnUrl = returnUrl ?? Url.Content("~/");
 
-            var user = await _userManager.FindByEmailAsync(email);
+            var user = await _userManager.FindByEmailAsync(Email);
             if (user == null)
             {
-                return NotFound($"Unable to load user with email '{email}'.");
+                return NotFound($"Unable to load user with Email '{Email}'.");
             }
 
-            Email = email;
-            // Once you add a real email sender, you should remove this code that lets you confirm the account
+            Email = Email;
+            // Once you add a real Email sender, you should remove this code that lets you confirm the account
             DisplayConfirmAccountLink = true;
             if (DisplayConfirmAccountLink)
             {

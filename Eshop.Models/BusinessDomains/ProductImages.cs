@@ -1,22 +1,22 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Eshop.Models.BusinessDomains;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Eshop.Web.Models
+namespace Eshop.Models.BusinessDomains
 {
     [Table("ProductImages")]
     public class ProductImages
     {
         [Key]
-        [HiddenInput(DisplayValue = false)]
-        public int AUTO_ID { get; set; }
+        public int AutoId { get; set; }
         public int? ProductID { get; set; }
         public int? IsCover { get; set; }
         public string? ImageName { get; set; }
         public string? ImagePath  { get; set; }
-        public string? CREATED_BY { get; set; }
-        public DateTime? CREATED_DATE { get; set;}
+        public string? CreatedBy { get; set; }
+        public DateTime? CreatedDate { get; set;}
+
         [ForeignKey("ProductID")]
         public virtual Product? Product_ { get; set; }
     }

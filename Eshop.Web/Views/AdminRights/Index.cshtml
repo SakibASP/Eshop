@@ -1,6 +1,5 @@
 ﻿@using Microsoft.AspNetCore.Html
-@using Eshop.Web.Models
-@model  IEnumerable<Eshop.Web.Models.ViewModels.MenuItemViewModel>
+@model  IEnumerable<Eshop.ViewModels.Menu.MenuItemViewModel>
 @*@model IList<MCMS_Web.Models.DynamicMenuItem>*@
 @{
     ViewBag.Title = "Index";
@@ -25,7 +24,7 @@
                     <p>Role Name: @Html.DropDownList("RoleId", (IEnumerable<SelectListItem>)ViewBag.Roles, "Select ...")</p>
 
                     {
-                        void  ShowTree(List<Eshop.Web.Models.MenuItem>? menusList) 
+                        void  ShowTree(List<Eshop.Models.Menu.MenuItem>? menusList) 
                         {
                             if (menusList != null)
                             {
@@ -45,7 +44,7 @@
                                 }
                             }
                         }
-                        var menuList = ViewBag.menusList as List<Eshop.Web.Models.MenuItem>;
+                        var menuList = ViewBag.menusList as List<Eshop.Models.Menu.MenuItem>;
                         ShowTree(menuList);
                     }
                 

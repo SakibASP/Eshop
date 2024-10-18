@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel;
 
-namespace Eshop.Web.Models.ViewModels
+namespace Eshop.ViewModels.BusinessDomains
 {
     public class ProductViewModel
     {
@@ -13,19 +13,16 @@ namespace Eshop.Web.Models.ViewModels
         [Range(0.01, double.MaxValue, ErrorMessage = "Please enter a positive price")]
         public double Price { get; set; }
 
-        [DisplayName("Buy Price")]
-        [Range(0.01, double.MaxValue, ErrorMessage = "Please enter a positive price")]
-        public double Buying_Price { get; set; }
         [DisplayName("Name")]
         public string? ImageName { get; set; }
 
         [DisplayName("Image")]
         public string? ImagePath { get; set; }
-        public string? CREATED_BY { get; set; }
+        public string? CreatedBy { get; set; }
         public string? ShortDesc { get; set; }
-        public DateTime? CREATED_DATE { get; set; }
+        public DateTime? CreatedDate { get; set; }
 
-        public int? CURRENT_STOCK { get; set; }
+        public int? CurrentStock { get; set; }
 
         [DisplayName("Category")]
         public int? Cat_Id { get; set; }

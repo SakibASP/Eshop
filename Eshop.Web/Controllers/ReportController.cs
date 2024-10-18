@@ -9,6 +9,7 @@ using Eshop.Web.ReportModels;
 using System.Data.SqlClient;
 using iText.Html2pdf;
 using Eshop.Web.Common;
+using Eshop.Models.BusinessDomains;
 
 namespace Eshop.Web.Controllers
 {
@@ -68,7 +69,7 @@ namespace Eshop.Web.Controllers
         [HttpPost]
         public IActionResult PeriodicalSell(ReportViewModel rvm)
         {
-            var orders = _context.ShipmentOrders.Where(x => x.CREATE_DATE >= rvm.StartDate && x.CREATE_DATE <= rvm.EndDate).ToList();
+            var orders = _context.ShipmentOrders.Where(x => x.CreatedDate >= rvm.StartDate && x.CreatedDate <= rvm.EndDate).ToList();
 
             List<ReportViewModel> repotParam = new List<ReportViewModel>();
 
@@ -102,7 +103,7 @@ namespace Eshop.Web.Controllers
         [HttpPost]
         public IActionResult PeriodicalBuy(ReportViewModel rvm)
         {
-            var orders = _context.Products.Where(x => x.CREATED_DATE >= rvm.StartDate && x.CREATED_DATE <= rvm.EndDate).ToList();
+            var orders = _context.Products.Where(x => x.CreatedDate >= rvm.StartDate && x.CreatedDate <= rvm.EndDate).ToList();
 
             List<ReportViewModel> repotParam = new List<ReportViewModel>();
 
@@ -123,7 +124,7 @@ namespace Eshop.Web.Controllers
             //webReport.Report.Dictionary.Connections.Add(mssqlDataConnection);
             //webReport.Report.Load(Path.Combine(_hostEnvironment.ContentRootPath, "Reports", "BuyHistory.frx"));
 
-            ////var Periodical_Products = _context.Products.Where(x => (x.CREATED_DATE >= rvm.StartDate && x.CREATED_DATE <= rvm.EndDate)).ToList();
+            ////var Periodical_Products = _context.Products.Where(x => (x.CreatedDate >= rvm.StartDate && x.CreatedDate <= rvm.EndDate)).ToList();
             ////var myproducts = GetTable<Product>(Periodical_Products, "Products");
 
             //var myproducts = GetFileDetails(rvm.StartDate,rvm.EndDate);
@@ -202,7 +203,7 @@ namespace Eshop.Web.Controllers
         {
             string conString = "Data Source=(local); Initial Catalog=Eshop.Web; uid=sa;pwd=sakib@123";
             string cmdText = "SELECT * FROM [Eshop.Web].[dbo].[Products]" +
-                " WHERE CREATED_DATE BETWEEN @StartDate AND @EndDate";
+                " WHERE CreatedDate BETWEEN @StartDate AND @EndDate";
             DataTable dtData = new DataTable();
             SqlConnection con = new SqlConnection(conString);
             con.Open();

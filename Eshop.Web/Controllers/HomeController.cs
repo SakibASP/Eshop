@@ -4,17 +4,12 @@ using Eshop.Web.Data;
 using Eshop.Web.Models;
 using System.Data;
 using System.Diagnostics;
+using Eshop.Utils;
 
 namespace Eshop.Web.Controllers
 {
-    public class HomeController : BaseController<HomeController>
+    public class HomeController(ApplicationDbContext context) : BaseController<HomeController>
     {
-        private readonly ApplicationDbContext _context;
-        public HomeController(ApplicationDbContext context)
-        {
-            _context = context;
-        }
-
         public IActionResult Index()
         {
             ViewData["Soccer"] = Convert.ToInt32(S_SOCCER_PERCENTAGE);
@@ -44,7 +39,7 @@ namespace Eshop.Web.Controllers
 
         protected override void Dispose(bool disposing)
         {
-            _context.Dispose();
+            context.Dispose();
             base.Dispose(disposing);
         }
     }

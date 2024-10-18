@@ -1,4 +1,5 @@
-﻿@using Eshop.Web.ReportModels
+﻿@using Eshop.Models.BusinessDomains
+@using Eshop.Web.ReportModels
 @using Eshop.Web.Models
 @addTagHelper*, Microsoft.AspNetCore.Mvc.TagHelpers
 
@@ -70,9 +71,9 @@
                 @foreach (ShipmentOrders order in orders)
                 {
                     <tr>
-                        <td style="width:120px;border: 1px solid #ccc">@order.PRODUCT_NAME</td>
-                        <td style="width:120px;border: 1px solid #ccc">@order.QUANTITY</td>
-                        <td style="width:120px;border: 1px solid #ccc">@order.PRICE</td>
+                        <td style="width:120px;border: 1px solid #ccc">@order.ProductName</td>
+                        <td style="width:120px;border: 1px solid #ccc">@order.Quantity</td>
+                        <td style="width:120px;border: 1px solid #ccc">@order.Price</td>
                     </tr>
                 }
 
@@ -81,8 +82,8 @@
             <tfoot>
                 <tr>
                     <td class="text-right">Total:</td>
-                    <td class="text-right">@orders.Sum(x=>x.QUANTITY)</td>
-                    <td class="text-right">@orders.Sum(x=>x.PRICE)</td>
+                    <td class="text-right">@orders.Sum(x=>x.Quantity)</td>
+                    <td class="text-right">@orders.Sum(x=>x.Price)</td>
 
                 </tr>
             </tfoot>

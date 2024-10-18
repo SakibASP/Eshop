@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Eshop.Web.Data;
 using Eshop.Web.Models.ViewModels;
+using Eshop.ViewModels.Users;
 
 namespace Eshop.Web.Controllers
 {

@@ -1,4 +1,4 @@
-﻿@model IEnumerable<Eshop.Web.Models.ShipmentOrders>
+﻿@model IEnumerable<Eshop.Models.BusinessDomains.ShipmentOrders>
 
 @{
     ViewData["Title"] = "Details";
@@ -9,20 +9,20 @@
 <hr />
 <div>
     @{
-        var name = Model.First()._ShippingDetails.NAME;
+        var name = Model.First()._ShippingDetails.Name;
     }
     <h6> <strong>ORDERED BY :</strong> <em> @name.ToString() </em></h6>      
     <table class="table">
         <thead>
             <tr>
                 <th>
-                    @Html.DisplayNameFor(model => model.PRODUCT_NAME)
+                    @Html.DisplayNameFor(model => model.ProductName)
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.QUANTITY)
+                    @Html.DisplayNameFor(model => model.Quantity)
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.PRICE)
+                    @Html.DisplayNameFor(model => model.Price)
                 </th>
                 @*<th></th>*@
             </tr>
@@ -32,17 +32,17 @@
             {
                 <tr>
                     <td>
-                        @Html.DisplayFor(modelItem => item.PRODUCT_NAME)
+                        @Html.DisplayFor(modelItem => item.ProductName)
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.QUANTITY)
+                        @Html.DisplayFor(modelItem => item.Quantity)
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.PRICE)
+                        @Html.DisplayFor(modelItem => item.Price)
                     </td>                   
                     @*<td>
-                        <a asp-action="Edit" asp-route-id="@item.AUTO_ID">Edit</a> |
-                        <a asp-action="Delete" asp-route-id="@item.AUTO_ID">Delete</a>
+                        <a asp-action="Edit" asp-route-id="@item.AutoId">Edit</a> |
+                        <a asp-action="Delete" asp-route-id="@item.AutoId">Delete</a>
                     </td>*@
                 </tr>
             }
@@ -50,7 +50,7 @@
         <tfoot>
             <tr>
                 <td colspan="2" class="text-right">Total:</td>
-                <td class="text-right">@Model.Sum(x=>x.PRICE)</td>
+                <td class="text-right">@Model.Sum(x=>x.Price)</td>
             </tr>
         </tfoot>
     </table>

@@ -6,6 +6,8 @@ using Eshop.Web.Common;
 using Eshop.Web.Data;
 using Eshop.Web.Models;
 using Eshop.Web.Models.ViewModels;
+using Eshop.ViewModels.Menu;
+using Eshop.Models.Menu;
 
 namespace Eshop.Web.Controllers
 {

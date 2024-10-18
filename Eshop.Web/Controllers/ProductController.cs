@@ -5,6 +5,7 @@ using Eshop.Web.Common;
 using Eshop.Web.Data;
 using Eshop.Web.Helper;
 using Eshop.Web.Models.ViewModels;
+using Eshop.ViewModels.BusinessDomains;
 //using X.PagedList;
 
 
@@ -42,12 +43,12 @@ namespace Eshop.Web.Controllers
             product_mv = sortOrder switch
             {
                 "name_desc" => [.. product_mv.OrderByDescending(s => s.Name)],
-                _ => [.. product_mv.OrderByDescending(x => x.CREATED_DATE)],
+                _ => [.. product_mv.OrderByDescending(x => x.CreatedDate)],
             };
             int pageSize = 6;
             int pageNumber = (page ?? 1);
 
-            ViewData["Cat_Id"] = new SelectList(_context.Category, "AUTO_ID", "CategoryName");
+            ViewData["Cat_Id"] = new SelectList(_context.Category, "AutoId", "CategoryName");
 
             var product_vm = product_mv.AsQueryable().AsNoTracking();
             return View(PaginatedList<ProductViewModel>.CreateAsync(product_vm, pageNumber, pageSize));
