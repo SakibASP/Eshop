@@ -1,18 +1,226 @@
-html {
-  font-size: 14px;
+
+.flex-button {
+    cursor: pointer;
+    display: inline-flex;
+    flex-direction: row;
+    gap: 10px;
+    font-size: 1rem;
 }
 
-@media (min-width: 768px) {
-  html {
-    font-size: 16px;
-  }
+#myAnchor {
+    text-decoration: none;
+    __color: #9a1f1f;
 }
 
-html {
-  position: relative;
-  min-height: 100%;
+#myRenderBody {
+    font-size: 0.97rem;
+    font-family: Arial, Helvetica, sans-serif;
 }
 
-body {
-  margin-bottom: 60px;
+#centerRow{
+    /*justify-content: center;
+    align-content: center;
+    padding: 1%;*/
+    justify-content: left;
+    align-content: start;
+}
+
+.reportmenu-item {
+    cursor: pointer;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+.reportmenu-item.selected {
+    __background-color: #cce5ff; /* Change the background color as desired */
+    background-color: darkcyan;
+    color: white;
+}
+
+
+.message{
+    text-align: start;
+    margin: 2% 0% 0% 3%;
+    font-family: font-family;
+    font-weight: normal;
+}
+
+/*START Increase the height of the Select2 input */
+.select2-container .select2-selection--single {
+    height: 35px; /* Adjust the height as needed */
+    align-items: start;
+}
+
+.select2-container .select2-selection--single .select2-selection__rendered {
+    line-height: 34px; /* Should be slightly less than the height */
+}
+
+.select2-container .select2-selection--single .select2-selection__arrow {
+    height: 34px; /* Should be slightly less than the height */
+}
+/*END Increase the height of the Select2 input*/
+
+#paramForm {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    width: 100%;
+    flex-wrap: wrap;
+}
+
+#paramForm .form-group {
+    margin-left: 10px;
+    margin-bottom: 10px;
+}
+
+#paramForm .form-control {
+    width: auto;
+}
+
+#paramFormStart {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    width: 100%;
+    flex-wrap: wrap;
+}
+
+#paramFormStart .form-group {
+    margin-left: 10px;
+}
+
+#paramFormStart .form-control {
+    width: auto;
+}
+
+/*Dashboard of GA index*/
+#customRow {
+    height: 20%;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-size: 0.93em;
+    margin: auto;
+    justify-content: center;
+    align-items: center;
+}
+
+#customRow th,
+#customRow td {
+    text-align: start; /* Center-align the content of both <th> and <td> elements */
+}
+
+/*canvas {
+    width: 100%;
+    height: 100%;
+    max-width: 600px;
+    max-height: 250px;
+}*/
+
+
+#myCardHeader {
+    text-align: center;
+    color: darkslateblue;
+    font-weight: bolder;
+    text-transform: uppercase;
+    font-size: 1em;
+}
+
+#HoverAbleCards .card {
+    transition: transform 0.5s ease; /* Add transition property */
+}
+
+#HoverAbleCards .card:hover {
+    transform: scale(1.1);
+}
+/* Add transition property to the image */
+#hover-effect {
+    transition: transform 0.5s ease;
+}
+
+/* Scale the image on hover */
+#hover-effect:hover {
+    transform: scale(1.1);
+}
+
+/* CSS for the initial color of the h1 tags */
+#changing-heading {
+    color: #0c7989;
+    transition: color 1.5s ease; /*Add transition for smooth color change*/
+}
+
+#whatsapp-button {
+    background-color: #25D366;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 5px;
+    text-decoration: none;
+    font-family: Arial, sans-serif;
+    display: inline-block;
+}
+
+.sidebar-footer {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    color: #fff;
+    text-align: center;
+    padding: 10px;
+    background-color: #010a0f;
+}
+
+.bordered {
+    border-radius: 50px;
+}
+
+
+/* Customize the hr element */
+hr.custom-hr {
+    border: 0;
+    height: 2px; /* Thickness */
+    background: linear-gradient(to right, #ff7f50, #87cefa); /* Gradient color */
+    margin: 20px 0; /* Margin around hr */
+}
+
+/* Dashed style */
+hr.dashed-hr {
+    border: none;
+    border-top: 2px dashed #4CAF50; /* Dashed border */
+    margin: 20px 0;
+}
+
+/* Dotted style */
+hr.dotted-hr {
+    border: none;
+    border-top: 2px dotted #000080; /* Dotted border */
+    margin: 20px 0;
+}
+
+/* Shadow effect */
+hr.shadow-hr {
+    border: 0;
+    height: 2px;
+    background-color: #333;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5); /* Shadow effect */
+}
+
+/* Filter form container */
+#filterFormContainer {
+    margin-top: 10px;
+    display: none; /* Start hidden */
+    transform: translateX(-100%); /* Start off-screen to the left */
+    opacity: 0; /* Start invisible */
+    transition: transform 0.4s ease, opacity 0.4s ease; /* Smooth transition for slide and fade */
+}
+
+#filterFormContainer.show {
+    display: block; /* Show when class 'show' is added */
+    transform: translateX(0); /* Slide into place */
+    opacity: 1; /* Make visible */
+}
+
+#filterFormDiv {
+    display: flex; /* Align children horizontally */
+    align-items: center; /* Center align vertically */
+    justify-content: start;
+    text-align: left;
 }

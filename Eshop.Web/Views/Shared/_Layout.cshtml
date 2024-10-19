@@ -201,15 +201,10 @@
                     </li>                      
                     @if (User.Identity.IsAuthenticated)
                     {
-                        @await Component.InvokeAsync("Menu");
-                        @*
-                        <li>
-                                <a class="nav-link text-dark" href="https://sandbox.braintreegateway.com/merchants/hxcc3jsbtmkkjcpt/home">Payments</a>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" style="font-size: medium; font:bold;" asp-area="" asp-controller="Dashboard" asp-action="Index">ADMIN</a>
                         </li>
-                        <li>
-                                <a class="nav-link text-dark" href="#">Reports</a>
-                        </li>
-                        *@
+                        @* @await Component.InvokeAsync("Menu"); *@
                     }
                     <li class="nav-item">
                         <a class="nav-link text-dark" style="font-size: medium; font:bold;" asp-area="" asp-controller="Home" asp-action="Privacy">PRIVACY</a>
@@ -273,12 +268,3 @@
     
 </body>
 </html>
- 
-<script>
-    // $(function () {
-    //     $("#cat_id").select2({ theme : 'classic' });
-    // })
-    // $(function () {
-    //     $("#Cat_Id").select2({ theme: 'classic' });
-    // })
-</script>

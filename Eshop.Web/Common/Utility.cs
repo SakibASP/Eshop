@@ -54,7 +54,7 @@ namespace Eshop.Web.Common
         
         public static async Task<List<Product>> GetTotalProducts(ApplicationDbContext db)
         {          
-            var productList = await db.Products.Include(x=>x.Category1).ToListAsync();
+            var productList = await db.Products.Include(x=>x.Category).ToListAsync();
 
             return productList;
         }
@@ -62,10 +62,10 @@ namespace Eshop.Web.Common
         public static void GetProductStock(out decimal? SoccerPercentage, out decimal? WatersportsPercentage, out decimal? ChessPercentage, out decimal? CricketPercentage, ApplicationDbContext _context)
         {
             var Products = Convert.ToDecimal(_context.Products.Count());
-            var Soccer = Convert.ToDecimal(_context.Products.Where(p => p.Cat_Id == 1).Sum(x=>x.CurrentStock));
-            var Watersports = Convert.ToDecimal(_context.Products.Where(p => p.Cat_Id == 2).Sum(x => x.CurrentStock));
-            var Chess = Convert.ToDecimal(_context.Products.Where(p => p.Cat_Id == 3).Sum(x => x.CurrentStock));
-            var Cricket = Convert.ToDecimal(_context.Products.Where(p => p.Cat_Id == 4).Sum(x => x.CurrentStock));
+            var Soccer = Convert.ToDecimal(_context.Products.Where(p => p.CategoryId == 1).Sum(x=>x.CurrentStock));
+            var Watersports = Convert.ToDecimal(_context.Products.Where(p => p.CategoryId == 2).Sum(x => x.CurrentStock));
+            var Chess = Convert.ToDecimal(_context.Products.Where(p => p.CategoryId == 3).Sum(x => x.CurrentStock));
+            var Cricket = Convert.ToDecimal(_context.Products.Where(p => p.CategoryId == 4).Sum(x => x.CurrentStock));
 
             SoccerPercentage = (Soccer / Products) * 100;
             WatersportsPercentage = (Watersports / Products) * 100;

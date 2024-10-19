@@ -35,7 +35,7 @@ namespace Eshop.Web.Controllers.BusinessDomains
 
             List<ProductViewModel> allProducts = await Utility.GetProducts(_context, null, cat_id, price, searchString);
             var coveredProduct = allProducts.Where(p => p.IsCover == 1).Distinct();
-            var noCoveredProduct = allProducts.Where(p => p.ImagePath is null && !coveredProduct.Any(c => c.ProductID == p.ProductID)).Distinct();
+            var noCoveredProduct = allProducts.Where(p => p.ImagePath is null && !coveredProduct.Any(c => c.ProductId == p.ProductId)).Distinct();
             List<ProductViewModel> product_mv = [.. coveredProduct, .. noCoveredProduct];
             product_mv = sortOrder switch
             {

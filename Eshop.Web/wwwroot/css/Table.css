@@ -1,0 +1,117 @@
+﻿.table-container {
+    width: 100%;
+    overflow-x: auto;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Add box shadow */
+}
+
+/*table-purple*/
+#table-purple th {
+    background-color: #6c5ce7; /* Gorgeous Purple Color */
+    color: #fff;
+    font-weight: bold;
+    text-align: left;
+    border-bottom: 4px solid #4834d4; /* Darker shade of purple */
+}
+
+
+#table-purple tbody tr:nth-child(even) {
+    background-color: #f8f9fa; /* Light gray color */
+}
+
+#table-purple tbody tr:hover {
+    background-color: #f0f0f0; /* Lighter gray color */
+}
+
+
+/*table-blue*/
+#table-blue th {
+    background-color: #007bff; /* Gorgeous Blue Color */
+    color: #fff;
+    font-weight: bold;
+    text-align: left;
+    border-bottom: 2px solid #0056b3; /* Darker shade of blue */
+}
+
+#table-blue tbody tr:nth-child(even) {
+    background-color: #f2f2f2; /* Light gray color */
+}
+   
+#table-blue tbody tr:hover {
+    background-color: #e0e0e0; /* Lighter gray color */
+}
+
+/*table-gray*/
+#table-gray th {
+    background-color: #f2f2f2;
+    color: #333;
+    font-weight: bold;
+    text-align: left;
+    border-bottom: 2px solid #ddd;
+}
+
+#table-gray tbody tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
+  
+#table-gray tbody tr:hover {
+    background-color: #e0e0e0;
+}
+
+/* Responsive Styles */
+@media only screen and (max-width: 600px) {
+    #table-blue td,
+    #table-blue th {
+        font-size: 12px; /* Decrease font size for smaller screens */
+    }
+
+    #table-purple td,
+    #table-purple th {
+        font-size: 12px; /* Decrease font size for smaller screens */
+    }
+
+    #table-gray td,
+    #table-gray th {
+        font-size: 12px; /* Decrease font size for smaller screens */
+    }
+}
+
+/* Header color */
+#example thead th {
+    background-color: #4CAF50; /* Green */
+    color: white;
+}
+
+/* Body color */
+#example tbody tr:nth-child(even) {
+    background-color: #f2f2f2; /* Light gray for even rows */
+}
+
+#example tbody tr:nth-child(odd) {
+    background-color: #ffffff; /* White for odd rows */
+}
+
+/* Optional: Hover effect */
+#example tbody tr:hover {
+    background-color: #ddd; /* Darker gray for hover effect */
+}
+
+/* Basic table styling */
+.customizedTable {
+    width: 80%;
+    border-collapse: collapse;
+    font-family: Arial, sans-serif;
+}
+
+.customizedTable th, .customizedTable td {
+    padding: 10px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+
+.customizedTable th {
+    background-color: #f2f2f2;
+}
+
+.customizedTable tr:hover {
+    background-color: #f5f5f5;
+}

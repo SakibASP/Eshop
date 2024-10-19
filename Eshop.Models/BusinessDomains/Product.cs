@@ -32,8 +32,12 @@ namespace Eshop.Models.BusinessDomains
 
         [DisplayName("Category")]
         [Required(ErrorMessage = "Please specify a category")]
-        public int? Cat_Id { get; set; }
+        public int? CategoryId { get; set; }
         public bool IsAvailabe { get; set; }
+        [DisplayName("Unit")]
+        public int? UnitId { get; set; }
+        [DisplayName("Unique Identity")]
+        public string? UniqueIdentity { get; set; }
 
         [NotMapped]
         public string? ImageName { get; set; }  
@@ -43,10 +47,9 @@ namespace Eshop.Models.BusinessDomains
         [NotMapped]
         public double TotalPrice { get { return (CurrentStock == 0 ? 1 : CurrentStock) * Price; } }
 
-        [ForeignKey("Cat_Id")]
-        [DisplayName("Category")]
-        public virtual Category? Category1 { get; set; }
-
-
+        [ForeignKey("CategoryId")]
+        public virtual Category? Category { get; set; }
+        [ForeignKey("UnitId")]
+        public virtual Units? Units { get; set; }
     }
 }

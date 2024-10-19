@@ -2,6 +2,7 @@
 
 @{
     ViewData["Title"] = "Details";
+    Layout = "~/Views/Shared/_adminLayout.cshtml";
 }
 
 <style>
@@ -25,95 +26,95 @@
         }
 </style>
 
-<h1>Details</h1>
-
-<div>
-    <h4>Product</h4>
-    <hr />
-    <dl class="row">
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Name)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.FirstOrDefault()!.Name)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Description)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.FirstOrDefault()!.Description)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Price)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.FirstOrDefault()!.Price)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Category)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.FirstOrDefault()!.Category)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model=>model.ImagePath)
-        </dt>
-        <dd>
-            <div class="row">
-                <div class="image-gallery">
-                    @foreach (var i in Model)
-                    {
-                        if (i.ImagePath != null)
-                        {
-                            <div class="image-item">
-                                <img src="~/@Url.Content(i.ImagePath)" alt="Image" />
-                                <br />
-                                <a asp-action="RemoveImage" asp-route-id="@i.ProductImageID" class="btn" style="color:red;">Remove</a>
-                                <br />
-                                <a asp-action="MakeCover" asp-route-id="@i.ProductImageID" class="btn" style="color:blue">Make Cover</a>
+<!-- Content Header (Page header) -->
+<section class="content-header">
+    <div class="header-icon">
+        <i class="fa fa-file-text"></i>
+    </div>
+    <div class="header-title">
+        <h1>Products</h1>
+        <small>Details</small>
+    </div>
+</section>
+<!-- Main content -->
+<section class="content">
+    <div class="row">
+        <!-- Form controls -->
+        <div class="col-sm-12">
+            <div class="card lobicard all_btn_card" id="lobicard-custom-control1" data-sortable="true">
+                <div class="card-header all_card_btn">
+                    <div class="card-title custom_title">
+                        <a class="btn btn-add" asp-action="Index"><i class="fa fa-list"></i> Product List </a>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <dl class="row">
+                        <dt class="col-sm-2">
+                            @Html.DisplayNameFor(model => model.Name)
+                        </dt>
+                        <dd class="col-sm-10">
+                            @Html.DisplayFor(model => model.FirstOrDefault()!.Name)
+                        </dd>
+                        <dt class="col-sm-2">
+                            @Html.DisplayNameFor(model => model.Description)
+                        </dt>
+                        <dd class="col-sm-10">
+                            @Html.DisplayFor(model => model.FirstOrDefault()!.Description)
+                        </dd>
+                        <dt class="col-sm-2">
+                            @Html.DisplayNameFor(model => model.Price)
+                        </dt>
+                        <dd class="col-sm-10">
+                            @Html.DisplayFor(model => model.FirstOrDefault()!.Price)
+                        </dd>
+                        <dt class="col-sm-2">
+                            @Html.DisplayNameFor(model => model.Category)
+                        </dt>
+                        <dd class="col-sm-10">
+                            @Html.DisplayFor(model => model.FirstOrDefault()!.Category)
+                        </dd>
+                        <dt class="col-sm-2">
+                            @Html.DisplayNameFor(model => model.ImagePath)
+                        </dt>
+                        <dd class="col-sm-10">
+                            <div class="row">
+                                <div class="image-gallery">
+                                    @foreach (var i in Model)
+                                    {
+                                        if (i.ImagePath != null)
+                                        {
+                                            <div class="image-item">
+                                                <img src="~/@Url.Content(i.ImagePath)" alt="Image" />
+                                                <br />
+                                                <a asp-action="RemoveImage" asp-route-id="@i.ProductImageId" class="btn" style="color:red;">Remove</a>
+                                                <br />
+                                                <a asp-action="MakeCover" asp-route-id="@i.ProductImageId" class="btn" style="color:blue">Make Cover</a>
+                                            </div>
+                                        }
+                                    }
+                                </div>
                             </div>
-                        }
-                    }
+                        </dd>
+                    </dl>
+                    <form asp-action="AddImages" enctype="multipart/form-data">
+                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                        <input type="hidden" asp-for="First().ProductId" />
+                        <div class="form-group">
+                            <label asp-for="First().ImagePath" class="control-label"></label>
+                            <input type="file" accept="image/*" asp-for="First().ImagePath" class="form-control-file" multiple="multiple" />
+                            <span asp-validation-for="First().ImagePath" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <a asp-action="Index">Back to List</a>
+                            <input type="submit" value="Add" class="btn btn-sm btn-info" />
+                        </div>
+                    </form>
                 </div>
             </div>
-        </dd>
-    </dl>
-    @*  <div class="col-sm-2">
-    @foreach (var i in Model)
-    {
-    if (i.ImageData != null)
-    {
-    <img class="img-fluid" style="height:120px;width:120px;" src= "data:ImageData;base64,@System.Convert.ToBase64String(i.ImageData)" />
-    <br />
-    <a asp-action="RemoveImage" asp-route-id="@i.ProductImageID" class="btn" style="color:red;">Remove</a>
-    <br />
-    <a asp-action="MakeCover" asp-route-id="@i.ProductImageID" class="btn" style="color:blue">Make Cover</a>
-
-    }
-    else
-    {
-    <p> No image </p>
-    }
-    }
-    </div> *@
-</div>
-
-<form asp-action="AddImages" enctype="multipart/form-data">
-    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-    <input type="hidden" asp-for="First().ProductID" />
-    <div class="form-group">
-        <label asp-for="First().ImagePath" class="control-label"></label>
-        <input type="file" accept="image/*" asp-for="First().ImagePath" class="form-control-file" multiple="multiple" />
-        <span asp-validation-for="First().ImagePath" class="text-danger"></span>
+        </div>
     </div>
-    <div class="form-group">
-        <input type="submit" value="Add" class="btn btn-info" />
-    </div>
-</form>
+</section>
 
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
 
 @section Scripts {
     @{

@@ -14,6 +14,11 @@
         public const string CRICKET = "_CRICKET";
         public const string PENDING_ORDERS = "_PENDING_ORDERS";
         public const string ImageFolderName = "ProductImages";
+        public const string Notifications = "Notifications";
+        public const string Admin = "Admin";
+        public const string SuperAdmin = "SuperAdmin";
+        public const string Error = "Error";
+        public const string Success = "Success";
     }
     public static class SP
     {

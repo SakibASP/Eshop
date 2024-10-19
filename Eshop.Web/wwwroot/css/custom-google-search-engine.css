@@ -1,0 +1,65 @@
+﻿
+/*Custom Google Search Engine Design */
+.gsc-control-cse {
+    background-color: black !important;
+    border: 0 !important;
+    padding: 6px 8px 6px 10px !important;
+    margin: 0px;
+    border-radius: 2px;
+    overflow: hidden;
+}
+
+form.gsc-search-box,
+table.gsc-search-box {
+    margin-bottom: 0 !important;
+}
+
+.gcse-search-box {
+    border: 0 !important;
+    background: black !important;
+}
+
+#nav_gcse {
+    width: 30%;
+}
+
+#home_gcse {
+    display: none;
+}
+
+/* Hide nav GCSE for smaller screens */
+@media (max-width: 768px) {
+    #nav_gcse {
+        display: none;
+    }
+
+    #home_gcse {
+        display: block;
+    }
+
+    .gsc-control-cse {
+        background-color: white !important;
+    }
+
+    .gcse-search-box {
+        background: white !important;
+    }
+}
+
+@media (max-width: 480px) {
+    #nav_gcse {
+        display: none;
+    }
+
+    #home_gcse {
+        display: block;
+    }
+
+    .gsc-control-cse {
+        background-color: white !important;
+    }
+
+    .gcse-search-box {
+        background: white !important;
+    }
+}

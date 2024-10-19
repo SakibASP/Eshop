@@ -2,57 +2,86 @@
 
 @{
     ViewData["Title"] = "Create";
+    Layout = "~/Views/Shared/_adminLayout.cshtml";
 }
 
-<h1>Create</h1>
-
-<h4>Product</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Create" enctype="multipart/form-data">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="Name" class="control-label"></label>
-                <input asp-for="Name" class="form-control" />
-                <span asp-validation-for="Name" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Description" class="control-label"></label>
-                <textarea asp-for="Description" class="form-control"></textarea>@*style="background-color: transparent;border:solid;border-color:black;border-width:thin;*@
-                <span asp-validation-for="Description" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Price" class="control-label"></label>
-                <input asp-for="Price" class="form-control" />
-                <span asp-validation-for="Price" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="CurrentStock" class="control-label"></label>
-                <input asp-for="CurrentStock" class="form-control" />
-                <span asp-validation-for="CurrentStock" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Cat_Id" class="control-label"></label>
-                <select asp-for="Cat_Id" class ="form-control" asp-items="ViewBag.Cat_Id">
-                    <option disabled selected>Please select...</option>
-                </select>
-            </div>
-            <div class="form-group">
-                <label asp-for="ImagePath" class="control-label"></label>
-                <input type="file" accept="image/*" asp-for="ImagePath" class="form-control-file" multiple="multiple" />
-                <span asp-validation-for="ImagePath" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
-            </div>
-        </form>
+<!-- Content Header (Page header) -->
+<section class="content-header">
+    <div class="header-icon">
+        <i class="fa fa-plus-circle"></i>
     </div>
-</div>
-
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
+    <div class="header-title">
+        <h1 id="changing-heading">Create Product</h1>
+        <small>Products</small>
+    </div>
+</section>
+<!-- Main content -->
+<section class="content">
+    <div class="row">
+        <!-- Form controls -->
+        <div class="col-sm-12">
+            <div class="card lobicard all_btn_card" id="lobicard-custom-control1" data-sortable="true">
+                <div class="card-header all_card_btn">
+                    <div class="card-title custom_title">
+                        <a class="btn btn-add" asp-action="Index"><i class="fa fa-list"></i> Product List </a>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <form asp-action="Create" class="col-sm-6" enctype="multipart/form-data">
+                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                        <div class="form-group">
+                            <label asp-for="Name" class="control-label"></label>
+                            <input asp-for="Name" class="form-control" />
+                            <span asp-validation-for="Name" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="UniqueIdentity" class="control-label"></label>
+                            <input asp-for="UniqueIdentity" class="form-control" />
+                            <span asp-validation-for="UniqueIdentity" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="UnitId" class="control-label"></label>
+                            <select asp-for="UnitId" class="form-control" asp-items="ViewBag.UnitId">
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="Description" class="control-label"></label>
+                            <textarea asp-for="Description" class="form-control"></textarea>@*style="background-color: transparent;border:solid;border-color:black;border-width:thin;*@
+                            <span asp-validation-for="Description" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="Price" class="control-label"></label>
+                            <input asp-for="Price" class="form-control" />
+                            <span asp-validation-for="Price" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="CurrentStock" class="control-label"></label>
+                            <input asp-for="CurrentStock" class="form-control" />
+                            <span asp-validation-for="CurrentStock" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="CategoryId" class="control-label"></label>
+                            <select asp-for="CategoryId" class="form-control" asp-items="ViewBag.Cat_Id">
+                                <option disabled selected>Please select...</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="ImagePath" class="control-label"></label>
+                            <input type="file" accept="image/*" asp-for="ImagePath" class="form-control-file" multiple="multiple" />
+                            <span asp-validation-for="ImagePath" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <br />
+                            <a asp-action="Index">Back to List</a>
+                            <input type="submit" value="Create" class="btn btn-primary" />
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- /.content -->
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}

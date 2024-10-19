@@ -31,33 +31,32 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Azure.Core" Version="1.36.0" />
-    <PackageReference Include="Braintree" Version="5.21.0" />
+    <PackageReference Include="BoldReports.AspNet.Core" Version="6.2.41" />
+    <PackageReference Include="BoldReports.Net.Core" Version="6.2.41" />
+    <PackageReference Include="Braintree" Version="5.27.0" />
     <PackageReference Include="DotLiquid" Version="2.2.692" />
-    <PackageReference Include="FastReport.OpenSource" Version="2024.1.1" />
-    <PackageReference Include="FastReport.OpenSource.Data.MsSql" Version="2021.4.0" />
-    <PackageReference Include="FastReport.OpenSource.Web" Version="2024.1.1" />
-    <PackageReference Include="itext7.pdfhtml" Version="5.0.2" />
-    <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="8.0.0" />
+    <PackageReference Include="itext7.pdfhtml" Version="5.0.5" />
+    <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="8.0.10" />
     <PackageReference Include="Microsoft.AspNetCore.Http.Extensions" Version="2.2.0" />
-    <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="8.0.0" />
-    <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="8.0.0" />
-    <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="8.0.0" />
-    <PackageReference Include="Microsoft.CodeAnalysis.Common" Version="4.0.0" />
-    <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Workspaces" Version="4.0.0" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.0" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="8.0.0" />
-    <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="8.0.0" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="8.0.0" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="8.0.0" />
-    <PackageReference Include="Microsoft.Extensions.Caching.SqlServer" Version="8.0.0" />
-    <PackageReference Include="X.PagedList" Version="8.4.7" />
-    <PackageReference Include="X.PagedList.Mvc.Core" Version="8.4.7" />
+    <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="8.0.10" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="8.0.10" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="8.0.10" />
+    <PackageReference Include="Microsoft.CodeAnalysis.Common" Version="4.11.0" />
+    <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Workspaces" Version="4.11.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.10" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="8.0.10" />
+    <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="8.0.10" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="8.0.10" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="8.0.10" />
+    <PackageReference Include="Microsoft.Extensions.Caching.SqlServer" Version="8.0.10" />
+    <PackageReference Include="Serilog.AspNetCore" Version="8.0.3" />
+    <PackageReference Include="X.PagedList" Version="10.5.3" />
+    <PackageReference Include="X.PagedList.Mvc.Core" Version="10.5.3" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Reports\" />
     <Folder Include="wwwroot\img\" />
+    <Folder Include="wwwroot\Manager\BusinessDomains\" />
   </ItemGroup>
 
   <ItemGroup>

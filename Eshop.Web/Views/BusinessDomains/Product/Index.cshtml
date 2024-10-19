@@ -107,7 +107,7 @@
                                     @if (item.ImagePath != null)
                                     {
                                         <div class="myimg" style="margin:2px;">
-                                            <a href="@Url.ActionLink("Details", "Product", new { id = item.ProductID })">
+                                            <a href="@Url.ActionLink("Details", "Product", new { id = item.ProductId })">
                                                 <img class="img-fluid" style="height:150px;width:150px;" src="~/@Url.Content(item.ImagePath)" />
                                             </a>
                                         </div>
@@ -117,7 +117,7 @@
                                         <span>@item.Price.ToString("c")</span>
                                     </h4>*@
                                     <p class="card-text">
-                                        <span>@item.ShortDesc @Html.ActionLink("see details","Details","Product", new{ id = @item.ProductID })</span>
+                                        <span>@item.ShortDesc @Html.ActionLink("see details","Details","Product", new{ id = @item.ProductId })</span>
                                     </p>
                                 </div>
                             </div>                            
@@ -125,7 +125,7 @@
                                 @using (Html.BeginForm("AddToCart", "Cart"))
                                 {
                                     <div class="myHiddenInput">
-                                        @Html.Hidden("productId",item.ProductID)
+                                        @Html.Hidden("productId",item.ProductId)
                                         @Html.Hidden("IsAvailabe",item.IsAvailabe)
                                         @Html.Hidden("returnUrl", @Context.Request.Path)
 
@@ -196,10 +196,10 @@
                                 @Html.HiddenFor(x=>item.Price , new { @id = "m_price" })
                                 @Html.HiddenFor(x=>item.CurrentStock, new { @id = "m_stock" })
                                 <div class="text-center">
-                                    @if (item.ProductImageID != null)
+                                    @if (item.ProductImageId != null)
                                     {
                                         <div style="margin:2px;">
-                                            <a href="@Url.ActionLink("Details", "Product", new { id = item.ProductID })">
+                                            <a href="@Url.ActionLink("Details", "Product", new { id = item.ProductId })">
                                                 <img class="img-fluid" style="height:75px;width:75px;" src="~/@Url.Content(item.ImagePath)" />
                                                 @* <img class="img-fluid" style="height:75px;width:75px;" src="data:ImageData;base64,@System.Convert.ToBase64String(item.ImageData)" /> *@
                                             </a>
@@ -210,7 +210,7 @@
                                 <span>@item.Price.ToString("c")</span>
                                 </h4>*@
                                     <p class="card-text">
-                                        <span>@item.ShortDesc @Html.ActionLink("see details","Details","Product", new { id = @item.ProductID })</span>
+                                        <span>@item.ShortDesc @Html.ActionLink("see details","Details","Product", new { id = @item.ProductId })</span>
                                     </p>
                                 </div>
                             </div>
@@ -218,7 +218,7 @@
                                 @using (Html.BeginForm("AddToCart", "Cart"))
                                 {
                                     <div class="text-center">
-                                        @Html.Hidden("productId",item.ProductID)
+                                        @Html.Hidden("productId",item.ProductId)
                                         @Html.Hidden("IsAvailabe",item.IsAvailabe)
                                         @Html.Hidden("returnUrl", @Context.Request.Path)
                                         

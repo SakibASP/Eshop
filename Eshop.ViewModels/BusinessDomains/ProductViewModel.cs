@@ -5,8 +5,8 @@ namespace Eshop.ViewModels.BusinessDomains
 {
     public class ProductViewModel
     {
-        public int? ProductID { get; set; }
-        public int? ProductImageID { get; set; }
+        public int? ProductId { get; set; }
+        public int? ProductImageId { get; set; }
         public string? Name { get; set; }
         public string? Description { get; set; }
 
@@ -25,7 +25,7 @@ namespace Eshop.ViewModels.BusinessDomains
         public int? CurrentStock { get; set; }
 
         [DisplayName("Category")]
-        public int? Cat_Id { get; set; }
+        public int? CategoryId { get; set; }
         public string? Category { get; set; }
         public int? IsCover { get; set; }
         public bool IsAvailabe { get; set; }

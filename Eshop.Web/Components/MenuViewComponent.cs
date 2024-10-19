@@ -19,7 +19,7 @@ namespace Eshop.Web.Components
         {
             HttpContext.Session.Remove(Constant.Menu);
             var UserId = _userManager.GetUserId(HttpContext.User);
-            var MenuList = _context.DynamicMenuItem.FromSqlRaw(
+            var MenuList = _context.Database.SqlQueryRaw<DynamicMenuItem>(
                                 "exec usp_GetMenuData @UserId",
                                 new SqlParameter("UserId", UserId)).ToList();
 

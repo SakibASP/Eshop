@@ -35,14 +35,14 @@ namespace Eshop.Web.Controllers.BusinessDomains
 
             ViewData["CurrentFilter"] = searchString ?? "";
 
-            List<Product>? products = await _context.Products.Include(x => x.Category1).Take(100).ToListAsync();
+            List<Product>? products = await _context.Products.Include(x => x.Category).Take(100).ToListAsync();
 
             // From session
             if (cat_id != null)
-                products = _context.Products.Where(c => c.Cat_Id == cat_id).Take(100).OrderBy(s => s.Name).ToList();
+                products = _context.Products.Where(c => c.CategoryId == cat_id).Take(100).OrderBy(s => s.Name).ToList();
 
             if (!string.IsNullOrEmpty(searchString))
-                products = await _context.Products.Include(x => x.Category1).Where(s => s.Name!.ToUpper().Contains(searchString.ToUpper()) || s.Category1.CategoryName.ToUpper().Contains(searchString.ToUpper())).Take(100).ToListAsync();
+                products = await _context.Products.Include(x => x.Category).Where(s => s.Name!.ToUpper().Contains(searchString.ToUpper()) || s.Category.CategoryName.ToUpper().Contains(searchString.ToUpper())).Take(100).ToListAsync();
 
             products = sortOrder switch
             {
@@ -76,6 +76,7 @@ namespace Eshop.Web.Controllers.BusinessDomains
         public IActionResult Create()
         {
             ViewData["Cat_Id"] = new SelectList(_context.Category, "AutoId", "CategoryName");
+            ViewData["UnitId"] = new SelectList(_context.Units, "AutoId", "UnitName");
             return View();
         }
 
@@ -116,7 +117,7 @@ namespace Eshop.Web.Controllers.BusinessDomains
                     TempData["Error"] = "Failed! Something went wrong. Alert : " + ex.Message;
                 }
             }
-            ViewData["Cat_Id"] = new SelectList(_context.Category, "AutoId", "CategoryName", product.Cat_Id);
+            ViewData["Cat_Id"] = new SelectList(_context.Category, "AutoId", "CategoryName", product.CategoryId);
             return View(product);
         }
 
@@ -132,7 +133,7 @@ namespace Eshop.Web.Controllers.BusinessDomains
             {
                 return NotFound();
             }
-            ViewData["Cat_Id"] = new SelectList(_context.Category, "AutoId", "CategoryName", product.Cat_Id);
+            ViewData["Cat_Id"] = new SelectList(_context.Category, "AutoId", "CategoryName", product.CategoryId);
             return View(product);
         }
 
@@ -185,7 +186,7 @@ namespace Eshop.Web.Controllers.BusinessDomains
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["Cat_Id"] = new SelectList(_context.Category, "AutoId", "CategoryName", product.Cat_Id);
+            ViewData["Cat_Id"] = new SelectList(_context.Category, "AutoId", "CategoryName", product.CategoryId);
             return View(product);
         }
         // GET: SystemAdmin/Delete/5
@@ -197,7 +198,7 @@ namespace Eshop.Web.Controllers.BusinessDomains
             }
 
             var product = await _context.Products
-                .Include(p => p.Category1)
+                .Include(p => p.Category)
                 .FirstOrDefaultAsync(m => m.AutoId == id);
             if (product == null)
             {
@@ -219,7 +220,7 @@ namespace Eshop.Web.Controllers.BusinessDomains
             var product = await _context.Products.FindAsync(id);
             if (product != null)
             {
-                var productImages = _context.ProductImages.Where(m => m.ProductID == id).ToList();
+                var productImages = _context.ProductImages.Where(m => m.ProductId == id).ToList();
                 if (!User.IsInRole("SuperAdmin"))
                 {
                     if (product.CurrentStock > 0)
@@ -261,7 +262,7 @@ namespace Eshop.Web.Controllers.BusinessDomains
                 var pRODUCT = await _context.Products.FindAsync(ProductID);
                 if (img is not null && pRODUCT is not null)
                 {
-                    var catName = _context.Category.Find(pRODUCT.Cat_Id)?.CategoryName ?? "Anonymous";
+                    var catName = _context.Category.Find(pRODUCT.CategoryId)?.CategoryName ?? "Anonymous";
                     string? imagePath = catName + "\\" + GetImageNameWithExtension(img.FileName, pRODUCT.Name + "_" + pRODUCT.AutoId);
                     string? filePath = Path.Combine(_webHostEnvironment.WebRootPath, Constant.ImageFolderName, imagePath);
 
@@ -274,7 +275,7 @@ namespace Eshop.Web.Controllers.BusinessDomains
                         await img.CopyToAsync(stream);
 
 
-                    productImages.ProductID = ProductID;
+                    productImages.ProductId = ProductID;
                     productImages.IsCover = isCover;
                     productImages.CreatedBy = CurrentUserName;
                     productImages.CreatedDate = DateTime.Now;
@@ -341,7 +342,7 @@ namespace Eshop.Web.Controllers.BusinessDomains
                 var productImages = await _context.ProductImages.FindAsync(id);
                 if (productImages != null)
                 {
-                    var CoverProductImage = _context.ProductImages.Where(p => p.ProductID == productImages.ProductID && p.IsCover == 1).ToList();
+                    var CoverProductImage = _context.ProductImages.Where(p => p.ProductId == productImages.ProductId && p.IsCover == 1).ToList();
                     if (CoverProductImage.Count() > 0)
                     {
                         CoverProductImage.FirstOrDefault()!.IsCover = null;

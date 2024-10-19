@@ -1,66 +1,64 @@
 ﻿@model IEnumerable<Eshop.Models.Menu.DynamicMenuItem>
 
-@if(Model != null)
+@if (Model != null)
 {
     @foreach (var m in Model)
+    {
+        if (m.MenuParentID == null)
         {
-            if (m.MenuParentID == null)
-            {
-                var submenu = Model.Where(n => n.MenuParentID == m.MID).ToList();
+            var submenu = Model.Where(n => n.MenuParentID == m.MID).ToList();
 
-                if (submenu != null && submenu.Count > 0)
-                {
-                    <li class="nav-item dropdown">
-                        <a class="nav-link " style="font-size: medium; font:bold;" href="#" data-bs-toggle="dropdown" aria-expanded="false">
-                            <span class="caret">@m.MenuName</span>
-                        </a>
-                    <ul class="dropdown-menu">
-                            @foreach (var e in submenu)
+            if (submenu != null && submenu.Count > 0)
+            {
+                <li class="treeview">
+                    <a href="#">
+                        <i class="@m.FaIcon"></i><span>@m.MenuName</span>
+                        <span class="pull-right-container">
+                            <i class="fa fa-angle-left float-right"></i>
+                        </span>
+                    </a>
+                    <ul class="treeview-menu">
+                        @foreach (var e in submenu)
+                        {
+                            var submenu2 = Model.Where(n => n.MenuParentID == e.MID).ToList();
+                            if (submenu2 != null && submenu2.Count > 0)
                             {
-                                var submenu2 = Model.Where(n => n.MenuParentID == e.MID).ToList();
-                                if (submenu2 != null && submenu2.Count > 0)
-                                {
-                                <li class="nav-item dropdown-submenu">
-                                    <a class="submenu" tabindex="-1" href="#">@e.MenuName <span class="caret"></span></a>
-                                    <ul class="dropdown-menu">
+                                <li class="treeview">
+                                    <a href="#">
+                                        <i class="@m.FaIcon"></i><span>@e.MenuName</span>
+                                        <span class="pull-right-container">
+                                            <i class="fa fa-angle-left float-right"></i>
+                                        </span>
+                                    </a>
+                                    <ul class="treeview-menu">
                                         @foreach (var f in submenu2)
                                         {
-                                            <li>
-                                                <a class="nav-link dropdown-toggle" href="@m.MenuURL" role="button" aria-expanded="false">
-                                                @m.MenuName
-                                                </a>
-                                            </li>
-                                            @*<li>@Html.ActionLink(f.MenuName, f.MenuURL == "#" ? "#" : f.MenuURL.Split('/')[1], f.MenuURL == "#" ? "#" : f.MenuURL.Split('/')[0])</li>*@
+                                            <li><a href="@f.MenuURL">@f.MenuName</a></li>
                                         }
                                     </ul>
                                 </li>
-                                }
-                                else
-                                {
-                                    <li>
-                                        <a class="nav-link" style="font-size: medium; font-family:Tahoma; font:bold;" href="@e.MenuURL" role="button" aria-expanded="false">
-                                            @e.MenuName
-                                        </a>
-                                    </li>
-                                    
-                                    @*<li>@Html.ActionLink(e.MenuName,e.MenuURL=="#"?"#":e.MenuURL.Split('/')[1], e.MenuURL == "#" ? "#" : e.MenuURL.Split('/')[0])</li>*@
-                                }
                             }
-                        </ul>
-                    </li>
-                }
-                else
-                {
-                    <li class="nav-item dropdown">
-                        @*<a tabindex="-1" href="@m.MenuUrl">@m.MenuName</a>*@
-                    <a class="nav-link" style="font-size: medium; font:bold;" href="@m.MenuURL" role="button" aria-expanded="false">
-                            @m.MenuName
-                            </a>
-                        @*@Html.ActionLink(m.MenuName, m.MenuURL == "#" ? "#" : m.MenuURL.Split('/')[1], m.MenuURL == "#" ? "#" : m.MenuURL.Split('/')[0])*@
-                    </li>
-                    
-                }
+                            else
+                            {
+                                <li>
+                                    <a href="@e.MenuURL">@e.MenuName</a>
+                                </li>
+                            }
+                        }
+                    </ul>
+                </li>
+            }
+            else
+            {
+                <li>
+                    <a href="@m.MenuURL">
+                        <i class="@m.FaIcon"></i> <span>@m.MenuName</span>
+                        <span class="pull-right-container">
+                        </span>
+                    </a>
+                </li>
             }
         }
+    }
 }
 

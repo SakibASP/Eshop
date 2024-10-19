@@ -29,7 +29,7 @@ namespace Eshop.Web.Controllers.BusinessDomains
         //adding new items to the cart
         public async Task<IActionResult> AddToCart(Cart cart, int productId, string returnUrl)
         {
-            Product? product = await context.Products.Include(c => c.Category1).FirstOrDefaultAsync(p => p.AutoId == productId);
+            Product? product = await context.Products.Include(c => c.Category).FirstOrDefaultAsync(p => p.AutoId == productId);
             if (product != null)
             {
                 try
@@ -70,7 +70,7 @@ namespace Eshop.Web.Controllers.BusinessDomains
         //removing an item from cart 
         public async Task<IActionResult> RemoveFromCart(Cart cart, int productId, string returnUrl)
         {
-            Product? product = await context.Products.Include(c => c.Category1).FirstOrDefaultAsync(p => p.AutoId == productId);
+            Product? product = await context.Products.Include(c => c.Category).FirstOrDefaultAsync(p => p.AutoId == productId);
             if (product != null)
             {
                 try
@@ -133,7 +133,7 @@ namespace Eshop.Web.Controllers.BusinessDomains
                         shipmentOrders.Quantity = i.Quantity;
                         shipmentOrders.ProductName = i.Product.Name;
                         shipmentOrders.ProductId = i.Product.AutoId;
-                        shipmentOrders.CategoryId = i.Product.Cat_Id;
+                        shipmentOrders.CategoryId = i.Product.CategoryId;
                         shipmentOrders.Price = (float)(i.Product.Price * i.Quantity);
                         shipmentOrders.CreatedBy = shippingDetails.CreatedBy;
                         shipmentOrders.CreatedDate = shippingDetails.CreatedDate;

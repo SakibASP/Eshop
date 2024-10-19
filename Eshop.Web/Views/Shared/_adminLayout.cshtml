@@ -1,0 +1,303 @@
+﻿@using Eshop.Utils
+@using Eshop.Web.Common
+@using Eshop.Web.Models
+@using Microsoft.AspNetCore.Identity
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
+@{
+    const string name = "E-Shop";
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="robots" content="noindex">
+    <title>@name</title>
+    <!-- Favicon and touch icons -->
+    <link rel="shortcut icon" href="~/logo/smallsize.png" type="image/x-icon">
+    <!-- Start Global Mandatory Style
+       =====================================================================-->
+    <!-- lobicard tather css -->
+    <link rel="stylesheet" href="~/crmadmin/assets/plugins/lobipanel/css/tether.min.css" />
+    <!-- Bootstrap -->
+    <link href="~/crmadmin/assets/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+    <!-- lobicard tather css -->
+    <link rel="stylesheet" href="~/crmadmin/assets/plugins/lobipanel/css/jquery-ui.min.css" />
+    <!-- lobicard min css -->
+    <link href="~/crmadmin/assets/plugins/lobipanel/css/lobicard.min.css" rel="stylesheet" />
+    <!-- lobicard github css -->
+    <link href="~/crmadmin/assets/plugins/lobipanel/css/github.css" rel="stylesheet" />
+    <!-- Pace css -->
+    @* <link href="~/crmadmin/assets/plugins/pace/flash.css" rel="stylesheet" /> *@
+    <!-- Font Awesome -->
+    <link href="~/crmadmin/assets/font-awesome/css/font-awesome.min.css" rel="stylesheet" />
+    <!-- Pe-icon -->
+    <link href="~/crmadmin/assets/pe-icon-7-stroke/css/pe-icon-7-stroke.css" rel="stylesheet" />
+    <!-- Themify icons -->
+    <link href="~/crmadmin/assets/themify-icons/themify-icons.css" rel="stylesheet" />
+    <!-- End Global Mandatory Style
+       =====================================================================-->
+    <!-- Start page Label Plugins
+       =====================================================================-->
+    <!-- Emojionearea -->
+    <link href="~/crmadmin/assets/plugins/emojionearea/emojionearea.min.css" rel="stylesheet" />
+    <!-- Monthly css -->
+    <link href="~/crmadmin/assets/plugins/monthly/monthly.css" rel="stylesheet" />
+    <!-- End page Label Plugins
+       =====================================================================-->
+    <!-- Start Theme Layout Style
+       =====================================================================-->
+    <!-- Theme style -->
+    <link href="~/crmadmin/assets/dist/css/stylecrm.css" rel="stylesheet" />
+    <!-- Theme style rtl -->
+    <!--<link href="~/crmadmin/assets/dist/css/stylecrm-rtl.css" rel="stylesheet" />-->
+    <!-- End Theme Layout Style
+       =====================================================================-->
+    <!--Select 2-->
+    <link href="~/css/selectitems/bootstrap-multiselect.css" rel="stylesheet" />
+    <link href="~/css/selectitems/select2.min.css" rel="stylesheet" />
+    <link href="~/lib/bootstrap/dist/css/jquery.toast.min.css" rel="stylesheet" />
+    <!--Customsized css for khan it-->
+    <link href="~/css/pagedlist.css" rel="stylesheet" />
+    <link href="~/css/table.css" rel="stylesheet" />
+    <link href="~/css/site.css" rel="stylesheet" />
+
+    <!--For Bold Reports-->
+    <link href="https://cdn.boldreports.com/6.1.34/content/material/bold.reports.all.min.css" rel="stylesheet" />
+    @* <script src="~/boldreports/jquery-1.10.2.min.js" asp-append-version="true"></script> *@
+    <script src="~/crmadmin/assets/plugins/jQuery/jquery-1.12.4.min.js"></script>
+    <script src="~/boldreports/bold.reports.common.min.js" asp-append-version="true"></script>
+    <!--Render the gauge item. Add this script only if your report contains the gauge report item. -->
+    <script src="~/boldreports/ej2-base.min.js" asp-append-version="true"></script>
+    <script src="~/boldreports/ej2-data.min.js" asp-append-version="true"></script>
+    <script src="~/boldreports/ej2-pdf-export.min.js" asp-append-version="true"></script>
+    <script src="~/boldreports/ej2-svg-base.min.js" asp-append-version="true"></script>
+    <script src="~/boldreports/ej2-lineargauge.min.js" asp-append-version="true"></script>
+    <script src="~/boldreports/ej2-circulargauge.min.js" asp-append-version="true"></script>
+    <!--Render the map item. Add this script only if your report contains the map report item.-->
+    <script src="~/boldreports/ej2-maps.min.js" asp-append-version="true"></script>
+    <script src="~/boldreports/bold.reports.widgets.min.js" asp-append-version="true"></script>
+    <!--Render the chart item. Add this script only if your report contains the chart report item.-->
+    <script src="~/boldreports/ej.chart.min.js" asp-append-version="true"></script>
+    <!-- Report Viewer component script-->
+    <script src="~/boldreports/bold.report-viewer.min.js" asp-append-version="true"></script>
+    <!--Bold Reports End-->
+</head>
+<body class="hold-transition sidebar-mini">
+    <!--preloader-->
+    <div id="preloader">
+        <div id="status"></div>
+    </div>
+    <!-- Site wrapper -->
+    <div class="wrapper">
+        <header class="main-header">
+            <a asp-action="Index" asp-controller="Home" class="logo">
+                <!-- Logo -->
+                <span class="logo-mini">
+                    @* <img src="~/crmadmin/assets/dist/img/mini-logo.png" alt=""> *@
+                    <img src="~/logo/smallsize.png" />
+                </span>
+                <span class="logo-lg">
+                    @* <img src="~/crmadmin/assets/dist/img/logo.png" alt=""> *@
+                    <img src="~/logo/largesize.png" />
+                </span>
+            </a>
+            <!-- Header Navbar -->
+            <nav class="navbar navbar-expand py-0">
+                <a href="#" class="sidebar-toggle" data-toggle="offcanvas" role="button">
+                    <!-- Sidebar toggle button-->
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="pe-7s-angle-left-circle"></span>
+                </a>
+
+                @if (SignInManager.IsSignedIn(User))
+                {
+                    <div class="collapse navbar-collapse navbar-custom-menu">
+                        <ul class="navbar-nav ml-auto">
+                            <!-- Notifications -->
+                            <li class="nav-item dropdown notifications-menu">
+                                <a class="nav-link admin-notification" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    <i class="pe-7s-bell"></i>
+                                    <span class="label bg-warning">0</span>
+                                </a>
+
+                                <div class="dropdown-menu drop_drops custom_drop_scroll" style="height: auto; max-height: 200px; overflow: scroll">
+                                    @* @if (notifications?.Count > 0)
+                                    {
+                                        // Iterate over the dictionary using foreach
+                                        foreach (KeyValuePair<int, string> kvp in notifications)
+                                        {
+                                            // Access the key and value
+                                            int key = kvp.Key;
+                                            string value = kvp.Value;
+
+                                            <a class="dropdown-item" href="/Ticket/Edit/@kvp.Key">
+                                                <div class="menues">
+                                                    <p>
+                                                        <i class="fa fa-dot-circle-o color-red"></i>
+                                                        <span class="truncated_text">@kvp.Value</span>
+                                                    </p>
+                                                </div>
+                                            </a>
+                                        }
+                                    } *@
+                                </div>
+                            </li>
+                            <!-- User -->
+                            <li class="nav-item dropdown dropdown-user">
+                                <a class="nav-link" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    <img src="~/crmAdmin/assets/dist/img/avatar5.png" class="rounded-circle" width="50" height="50" alt="user">
+                                </a>
+
+                                <div class="dropdown-menu drop_down">
+                                    <div class="menus">
+                                        <a class="dropdown-item" asp-area="Identity" asp-page="/Account/Manage/Index"><i class="fa fa-user"></i> User Profile</a>
+                                        <a class="dropdown-item" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Page("/", new { area = "" })"><i class="fa fa-sign-out"></i> Signout</a>
+                                    </div>
+                                </div>
+
+                            </li>
+                        </ul>
+                    </div>
+                }
+            </nav>
+        </header>
+        <!-- =============================================== -->
+        @if (SignInManager.IsSignedIn(User))
+        {
+            <!-- Left side column. contains the sidebar -->
+            <aside class="main-sidebar">
+                <!-- sidebar -->
+                <div class="sidebar">
+                    <!-- sidebar menu -->
+                    <ul class="sidebar-menu">
+                        <li>
+                            <a asp-area="" asp-controller="Home" asp-action="Index">
+                                <i class="fa fa-home"></i><span>Home</span>
+                                <span class="pull-right-container">
+                                </span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="/Dashboard/index">
+                                <i class="fa fa-dashboard"></i> <span>Dashboard</span>
+                                <span class="pull-right-container">
+                                </span>
+                            </a>
+                        </li>
+                        @await Component.InvokeAsync("Menu")
+                    </ul>
+                </div>
+                <!-- /.sidebar -->
+                <!-- footer -->
+                <footer class="sidebar-footer">
+                    <small>Logged in as</small>
+                    <hr class="shadow-hr" />
+                    <small style="color: gray"> @User.Identity?.Name</small>
+                </footer>
+            </aside>
+        }
+        <!-- =============================================== -->
+        <!-- Content Wrapper. Contains page content -->
+        <div class="content-wrapper">
+            @if (@TempData[Constant.Error] != null)
+            {
+                <div class="text-left" style="background-color: darkred">
+                    <span class="message" style="font-size:medium; color:white;"><strong style="font:bold;"> 😢 Error:</strong> @TempData[Constant.Error]</span>
+                </div>
+            }
+            @if (@TempData[Constant.Success] != null)
+            {
+                <div class="text-left" style="background-color: darkgreen">
+                    <span class="message" style="font-size:medium; color:white;"><strong style="font:bold;"> 😊 Success:</strong> @TempData[Constant.Success]</span>
+                </div>
+            }
+            @RenderBody()
+
+        </div>
+
+        <!-- /.content-wrapper -->
+        <footer class="main-footer">
+            <div class="container-fluid px-4">
+                <div class="d-flex align-items-center justify-content-between small">
+                    <div class="text-muted" style="font-size: 1rem"> &copy; 2024 - <a href="https://khanit.com.bd" target="_blank"><strong>E-Shop</strong></a></div>
+                    <div class="text-muted" style="font-size: 0.7rem">
+                        Developed by <a id="myAnchor" href="http://sakib.runasp.net/" target="_blank">Md. Sakibur Rahman</a>
+                    </div>
+                </div>
+            </div>
+        </footer>
+    </div>
+    <!-- /.wrapper -->
+    <!-- Start Core Plugins
+    =====================================================================-->
+    <!-- jQuery -->
+    @* <script src="~/crmadmin/assets/plugins/jQuery/jquery-1.12.4.min.js"></script> *@
+    <script src="~/lib/jquery/dist/jquery.toast.min.js" asp-append-version="true"></script>
+    <!-- Bootstrap proper -->
+    <script src="~/crmadmin/assets/bootstrap/js/popper.min.js"></script>
+    <!-- lobicard ui min js -->
+    <script src="~/crmadmin/assets/plugins/lobipanel/js/jquery-ui.min.js"></script>
+    <!-- lobicard ui touch-punch-improved js -->
+    <script src="~/crmadmin/assets/plugins/lobipanel/js/jquery.ui.touch-punch-improved.js"></script>
+    <!-- lobicard tether min js -->
+    <script src="~/crmadmin/assets/plugins/lobipanel/js/tether.min.js"></script>
+    <!-- Bootstrap -->
+    <script src="~/crmadmin/assets/bootstrap/js/bootstrap.min.js"></script>
+    <!-- lobicard js -->
+    <script src="~/crmadmin/assets/plugins/lobipanel/js/lobicard.js"></script>
+    <!-- lobicard highlight js -->
+    <script src="~/crmadmin/assets/plugins/lobipanel/js/highlight.js"></script>
+    <!-- Pace js [Used for loading] -->
+    @* <script src="~/crmadmin/assets/plugins/pace/pace.min.js"></script> *@
+    <!-- NIceScroll -->
+    <script src="~/crmadmin/assets/plugins/slimScroll/jquery.nicescroll.min.js"></script>
+    <!-- FastClick -->
+    <script src="~/crmadmin/assets/plugins/fastclick/fastclick.min.js"></script>
+    <!-- CRMadmin frame -->
+    <script src="~/crmadmin/assets/dist/js/custom.js"></script>
+    <!-- table-export js -->
+    <script src="~/crmadmin/assets/plugins/table-export/tableExport.js"></script>
+    <script src="~/crmadmin/assets/plugins/table-export/jquery.base64.js"></script>
+    <script src="~/crmadmin/assets/plugins/table-export/html2canvas.js"></script>
+    <script src="~/crmadmin/assets/plugins/table-export/sprintf.js"></script>
+    <script src="~/crmadmin/assets/plugins/table-export/jspdf.js"></script>
+    <script src="~/crmadmin/assets/plugins/table-export/base64.js"></script>
+    <!-- dataTables js -->
+    <script src="~/crmadmin/assets/plugins/datatables/dataTables.min.js"></script>
+    <!-- NiceScroll -->
+    <script src="~/crmadmin/assets/plugins/slimScroll/jquery.nicescroll.min.js"> </script>
+    <!-- FastClick -->
+    <script src="~/crmadmin/assets/plugins/fastclick/fastclick.min.js"></script>
+    <!-- ChartJs JavaScript -->
+    @* <script src="~/crmadmin/assets/plugins/chartJs/Chart.min.js"></script> *@
+    <script src="~/chartjs/chart.js"></script>
+    <script src="~/chartjs/chartjs-plugin-datalabels.min.js"></script>
+    <!-- Counter js -->
+    <script src="~/crmadmin/assets/plugins/counterup/waypoints.js"></script>
+    <script src="~/crmadmin/assets/plugins/counterup/jquery.counterup.min.js"></script>
+    <!-- Monthly js -->
+    <script src="~/crmadmin/assets/plugins/monthly/monthly.js"></script>
+    <!-- End Core Plugins-->
+    <!-- Dashboard js -->
+    <script src="~/crmadmin/assets/dist/js/dashboard.js"></script>
+    <!-- End Theme label Script-->
+    <!--Select 2-->
+    <script src="~/js/selectitems/bootstrap-multiselect.min.js"></script>
+    <script src="~/js/selectitems/select2.min.js"></script>
+    <!--Zip Functionality-->
+    <script src="~/js/jszip.min.js"></script>
+    <!--Customized for khan It-->
+    <script src="~/services/ajax-service.js"></script>
+    <script src="~/js/site.js"></script>
+    <!-- End Theme label Script
+       =====================================================================-->
+    @await RenderSectionAsync("Scripts", required: false)
+    @await RenderSectionAsync("clientServiceJS", required: false)
+    <!-- Bold Reports script manager -->
+    <bold-script-manager></bold-script-manager>
+</body>
+</html>
+
