@@ -1,16 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
+﻿using System.Data;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
-using Eshop.Web.Common;
 using Eshop.Web.Data;
-using Eshop.Web.Models;
-using Eshop.Web.Models.ViewModels;
 using Eshop.Models.BusinessDomains;
 using Eshop.ViewModels.BusinessDomains;
 using Eshop.Utils;
@@ -19,25 +10,6 @@ namespace Eshop.Web.Common
 {
     public static class Utility 
     {
-        //public static byte[]? Getimage(byte[]? img, IFormFileCollection files)
-        //{
-        //    Product prod = new Product();
-        //    MemoryStream ms = new MemoryStream();
-        //    if (files != null)
-        //    {
-        //        foreach (var file in files)
-        //        {
-        //            file.CopyTo(ms);
-        //            prod.ImageData = ms.ToArray();
-
-        //            ms.Close();
-        //            ms.Dispose();
-
-        //            img = prod.ImageData;
-        //        }
-        //    }
-        //    return img;
-        //}
         public static string TruncateDescription(string myString, int maxLength)
         {
             // If the string isn't null or empty
@@ -54,8 +26,6 @@ namespace Eshop.Web.Common
         }
         public static async Task<List<ProductViewModel>> GetProducts(ApplicationDbContext db,int? p_id, int? cat_id_, int? price_, string? searchString_)
         {
-            db.Database.SetCommandTimeout(600);
-
             var product_id = new SqlParameter("@product_id", SqlDbType.Int)
             {
                 Value = (object?)p_id ?? DBNull.Value
@@ -78,47 +48,17 @@ namespace Eshop.Web.Common
 
             var @params = new[] { product_id, cat_id, price, searchString };
 
-            //var cmdText = "EXEC GetProducts @product_id=@product_id, @cat_id=@cat_id,@price=@price,@searchString=@searchString";
-            //var productViewModel = db.Set<ProductViewModel>().FromSqlRaw(cmdText, product_id,cat_id, price,searchString).ToList();
-
-            var productViewModel = await db.ProductViewModel.FromSqlRaw(SP.GetProducts, @params).ToListAsync();
+            var productViewModel = await db.Database.SqlQueryRaw<ProductViewModel>(SP.GetProducts, @params).ToListAsync();
             return productViewModel;
         }
         
-        public static List<ProductViewModel> GetProducts2(ApplicationDbContext _context)
-        {
-            var myprod = (from e in _context.Products
-                          join c in _context.Category on e.Cat_Id equals c.AutoId
-                          join d in _context.ProductImages
-                          on e.AutoId equals d.ProductID into prodDept
-                          from ed in prodDept.DefaultIfEmpty()
-                          select new ProductViewModel
-                          {
-                              ProductID = ed.ProductID,
-                              //ImageData = ed.ImageData,
-                              ImageName = ed.ImageName,
-                              CreatedBy = ed.CreatedBy,
-                              CreatedDate = ed.CreatedDate,
-                              CurrentStock = e.CurrentStock,
-                              Cat_Id = e.Cat_Id,
-                              Category = c.CategoryName,
-                              IsCover = ed.IsCover,
-                              IsAvailabe = e.IsAvailabe,
-                              Name = e.Name,
-                              ProductImageID = ed.AutoId,
-                              Price = e.Price,
-                              Description = e.Description,
-                              ShortDesc = Utility.TruncateDescription(e.Description, 10),
-                          }).ToList();
-            return myprod;
-        }
-        
-        public static List<Product> GetTotalProducts(ApplicationDbContext db)
+        public static async Task<List<Product>> GetTotalProducts(ApplicationDbContext db)
         {          
-            var productList = db.Products.Include(x=>x.Category1).ToList();
+            var productList = await db.Products.Include(x=>x.Category1).ToListAsync();
 
             return productList;
         }
+
         public static void GetProductStock(out decimal? SoccerPercentage, out decimal? WatersportsPercentage, out decimal? ChessPercentage, out decimal? CricketPercentage, ApplicationDbContext _context)
         {
             var Products = Convert.ToDecimal(_context.Products.Count());

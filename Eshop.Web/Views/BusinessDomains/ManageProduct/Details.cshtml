@@ -66,16 +66,12 @@
                         if (i.ImagePath != null)
                         {
                             <div class="image-item">
-                                <img src="@Url.Content(i.ImagePath)" alt="Image" />
+                                <img src="~/@Url.Content(i.ImagePath)" alt="Image" />
                                 <br />
                                 <a asp-action="RemoveImage" asp-route-id="@i.ProductImageID" class="btn" style="color:red;">Remove</a>
                                 <br />
                                 <a asp-action="MakeCover" asp-route-id="@i.ProductImageID" class="btn" style="color:blue">Make Cover</a>
                             </div>
-                        }
-                        else
-                        {
-                            <p> No image </p>
                         }
                     }
                 </div>

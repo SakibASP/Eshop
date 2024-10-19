@@ -4,23 +4,22 @@ using Microsoft.EntityFrameworkCore;
 using Eshop.Web.Common;
 using Eshop.Web.Data;
 using Eshop.Web.Helper;
-using Eshop.Web.Models.ViewModels;
 using Eshop.ViewModels.BusinessDomains;
-//using X.PagedList;
+using Eshop.Web.Controllers.Common;
 
 
-namespace Eshop.Web.Controllers
+namespace Eshop.Web.Controllers.BusinessDomains
 {
-    public class ProductController(ApplicationDbContext context) : BaseController<ProductController>
+    public class ProductController(ApplicationDbContext context) : BaseController
     {
         private readonly ApplicationDbContext _context = context;
 
         // GET: Product
         //image/jpeg
-        public async Task<IActionResult> Index(int? cat_id,int? price, string? sortOrder, string? currentFilter, string? searchString,int? page)
+        public async Task<IActionResult> Index(int? cat_id, int? price, string? sortOrder, string? currentFilter, string? searchString, int? page)
         {
             ViewData["CurrentSort"] = sortOrder;
-            ViewData["NameSortParm"] = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
+            ViewData["NameSortParm"] = string.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
 
             if (searchString != null)
             {
@@ -38,24 +37,18 @@ namespace Eshop.Web.Controllers
             var coveredProduct = allProducts.Where(p => p.IsCover == 1).Distinct();
             var noCoveredProduct = allProducts.Where(p => p.ImagePath is null && !coveredProduct.Any(c => c.ProductID == p.ProductID)).Distinct();
             List<ProductViewModel> product_mv = [.. coveredProduct, .. noCoveredProduct];
-            //same as the above code, we can use both Concat or '..'
-            //List<ProductViewModel> product_mv2 = new List<ProductViewModel>(coveredProduct.Concat(noCoveredProduct));
             product_mv = sortOrder switch
             {
                 "name_desc" => [.. product_mv.OrderByDescending(s => s.Name)],
                 _ => [.. product_mv.OrderByDescending(x => x.CreatedDate)],
             };
             int pageSize = 6;
-            int pageNumber = (page ?? 1);
+            int pageNumber = page ?? 1;
 
             ViewData["Cat_Id"] = new SelectList(_context.Category, "AutoId", "CategoryName");
 
             var product_vm = product_mv.AsQueryable().AsNoTracking();
             return View(PaginatedList<ProductViewModel>.CreateAsync(product_vm, pageNumber, pageSize));
-
-            //Turned off PagedList
-            //return View(product_mv.ToPagedList(pageNumber, pageSize));
-
         }
 
         // GET: Product/Details/5

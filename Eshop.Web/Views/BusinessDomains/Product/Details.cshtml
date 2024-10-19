@@ -42,12 +42,7 @@
             {
                 if (i.ImagePath != null)
                 {
-                    <img class="img-fluid" style="height:300px;width:300px;" src="@Url.Content(i.ImagePath)" />
-                   @*  <img class="img-fluid" style="height:300px;width:300px;" src="data:ImageData;base64,@System.Convert.ToBase64String(i.ImageData)" /> *@
-                }
-                else
-                {
-                    <p> No image </p>
+                    <img class="img-thumbnail" style="height:300px;width:300px;" src="~/@Url.Content(i.ImagePath)" />
                 }
             }                
         </dd>

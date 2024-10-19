@@ -1,22 +1,22 @@
 ﻿using Braintree;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Eshop.Web.Common;
 using Eshop.Web.Data;
 using Eshop.Web.Helper;
 using Eshop.Web.Interfaces;
 using Eshop.Web.Models;
 using Eshop.Web.Models.ViewModels;
 using Eshop.Utils;
+using Eshop.Web.Controllers.Common;
 
-namespace Eshop.Web.Controllers
+namespace Eshop.Web.Controllers.BusinessDomains
 {
-    public class PaymentController : BaseController<PaymentController>
+    public class PaymentController : BaseController
     {
         private readonly IBraintreeService _braintreeService;
         private readonly ApplicationDbContext _context;
         private readonly UserManager<ApplicationUser> _userManager;
-        
+
         public PaymentController(ApplicationDbContext context, UserManager<ApplicationUser> userManager, IBraintreeService braintreeService)
         {
             _userManager = userManager;
@@ -40,7 +40,8 @@ namespace Eshop.Web.Controllers
         {
             var usr = await _userManager.GetUserAsync(HttpContext.User);
             var gateway = _braintreeService.GetGateway();
-            var customer = new CustomerRequest { 
+            var customer = new CustomerRequest
+            {
                 FirstName = usr?.FirstName,
                 LastName = usr?.LastName,
                 Email = usr?.Email,
@@ -65,7 +66,7 @@ namespace Eshop.Web.Controllers
                 model.Cart.Clear();
                 HttpContext.Session.SetInt32(Constant.CartTotal, model.Cart.Lines.Sum(x => x.Quantity));
                 ViewData["CartTotal"] = HttpContext.Session.GetInt32(Constant.CartTotal);
-                SessionHelper.SetObjectAsJson<Cart>(HttpContext.Session, Constant.CART, model.Cart);
+                HttpContext.Session.SetObjectAsJson<Cart>(Constant.CART, model.Cart);
 
                 return await Task.FromResult(View("Success"));
             }

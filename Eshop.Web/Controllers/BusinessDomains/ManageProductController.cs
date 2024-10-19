@@ -8,34 +8,25 @@ using Eshop.Web.Common;
 using Eshop.Web.Data;
 using Eshop.Web.Helper;
 using Eshop.Web.Models;
-using Eshop.Web.Models.ViewModels;
-using X.PagedList;
 using Eshop.Models.BusinessDomains;
 using Eshop.ViewModels.BusinessDomains;
 using Eshop.Utils;
+using Eshop.Web.Controllers.Common;
 //using X.PagedList;
 
-namespace Eshop.Web.Controllers
+namespace Eshop.Web.Controllers.BusinessDomains
 {
     [Authorize]
-    public class SystemAdminController : BaseController<SystemAdminController>
+    public class ManageProductController(ApplicationDbContext context, IWebHostEnvironment webHostEnvironment) : BaseController
     {
-        private readonly ApplicationDbContext _context;
-        private readonly SignInManager<ApplicationUser> _signInManager;
-        private readonly UserManager<ApplicationUser> _userManager;
-
-        public SystemAdminController(ApplicationDbContext context, SignInManager<ApplicationUser> signInManager, UserManager<ApplicationUser> userManager)
-        {
-            _context = context;
-            _signInManager = signInManager;
-            _userManager = userManager;
-        }
+        private readonly ApplicationDbContext _context = context;
+        private readonly IWebHostEnvironment _webHostEnvironment = webHostEnvironment;
 
         // GET: SystemAdmin
-        public async Task<ActionResult> Index(int? cat_id,string? sortOrder, string? currentFilter, string? searchString, int? page)
+        public async Task<ActionResult> Index(int? cat_id, string? sortOrder, string? currentFilter, string? searchString, int? page)
         {
             ViewData["CurrentSort"] = sortOrder;
-            ViewData["NameSortParm"] = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
+            ViewData["NameSortParm"] = string.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
 
             if (searchString != null)
                 page = 1;
@@ -44,23 +35,23 @@ namespace Eshop.Web.Controllers
 
             ViewData["CurrentFilter"] = searchString ?? "";
 
-            List<Product>? products = await _context.Products.Include(x=>x.Category1).Take(100).ToListAsync();
+            List<Product>? products = await _context.Products.Include(x => x.Category1).Take(100).ToListAsync();
 
             // From session
             if (cat_id != null)
                 products = _context.Products.Where(c => c.Cat_Id == cat_id).Take(100).OrderBy(s => s.Name).ToList();
 
-            if (!String.IsNullOrEmpty(searchString))
+            if (!string.IsNullOrEmpty(searchString))
                 products = await _context.Products.Include(x => x.Category1).Where(s => s.Name!.ToUpper().Contains(searchString.ToUpper()) || s.Category1.CategoryName.ToUpper().Contains(searchString.ToUpper())).Take(100).ToListAsync();
 
             products = sortOrder switch
             {
-                "name_desc" =>  products.OrderByDescending(s => s.Name).ToList(),
+                "name_desc" => products.OrderByDescending(s => s.Name).ToList(),
                 // Name ascending 
-                _ =>  products.OrderBy(s => s.Name).ToList(),
+                _ => products.OrderBy(s => s.Name).ToList(),
             };
             int pageSize = 6;
-            int pageNumber = (page ?? 1);
+            int pageNumber = page ?? 1;
 
             ViewData["Cat_Id"] = new SelectList(_context.Category.AsNoTracking(), "AutoId", "CategoryName");
             //return View(products.ToPagedList(pageNumber, pageSize));
@@ -81,137 +72,6 @@ namespace Eshop.Web.Controllers
             return View(product_mv);
         }
 
-        //For removing stored photos in image tables
-        public async Task<IActionResult> RemoveImage(int? id)
-        {
-            try
-            {
-                var productImages = await _context.ProductImages.FindAsync(id);
-                if(productImages != null)
-                {
-                    // Construct the full file path to the image
-                    var imagePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", productImages.ImagePath!);
-
-                    // Check if the image file exists
-                    if (System.IO.File.Exists(imagePath))
-                    {
-                        // Delete the image file from the server's file system
-                        System.IO.File.Delete(imagePath);
-                    }
-                    _context.Remove(productImages);
-                    await _context.SaveChangesAsync();
-
-                    HttpContext.Session.Remove(Constant.PRODUCTS_LIST);
-                    HttpContext.Session.Remove(Constant.TOTAL_PRODUCTS_LIST);
-                    TempData["Success"] = "Removed succesfully";
-                }
-                else
-                {
-                    TempData["Error"] = "Sorry! You have to delete the product.";
-                }
-            }
-            catch(Exception ex)
-            {
-                TempData["Error"] = "Failed! Something went wrong";
-            }
-            return RedirectToAction(nameof(Index));
-        }
-        //For making cover
-        public async Task<IActionResult> MakeCover(int? id)
-        {
-            try
-            {
-                var productImages = await _context.ProductImages.FindAsync(id);
-                if (productImages != null)
-                {
-                    var CoverProductImage = _context.ProductImages.Where(p => p.ProductID == productImages.ProductID && p.IsCover == 1).ToList();
-                    if (CoverProductImage.Count() > 0) 
-                    {
-                        CoverProductImage.FirstOrDefault()!.IsCover = null;
-                        _context.Update(productImages);
-                        await _context.SaveChangesAsync();
-                    }
-
-                    productImages.IsCover = 1;
-                    _context.Update(productImages);
-                    await _context.SaveChangesAsync();
-
-                    HttpContext.Session.Remove(Constant.PRODUCTS_LIST);
-                    HttpContext.Session.Remove(Constant.TOTAL_PRODUCTS_LIST);
-                    TempData["Success"] = "Cover setted succesfully";
-                }
-                else
-                {
-                    TempData["Error"] = "Sorry! You have to delete the product.";
-                }
-            }
-            catch (Exception ex)
-            {
-                TempData["Error"] = "Failed! Something went wrong";
-            }
-            return RedirectToAction(nameof(Index));
-        }
-
-        //For adding photos to the image table
-        public async Task<IActionResult> AddImages(int? ProductID,int? isCover)
-        {
-            try
-            {
-                ProductImages productImages = new ProductImages();
-                var img = Request.Form.Files.FirstOrDefault();
-                var pRODUCT = await _context.Products.FindAsync(ProductID);
-                if (img is not null && pRODUCT is not null)
-                {
-                    var catName = _context.Category.Find(pRODUCT.Cat_Id)?.CategoryName ?? "Anonymous";
-                    string? imagePath = catName + "/" + GetImageNameWithExtension(img.FileName, pRODUCT.Name + "_" + pRODUCT.AutoId);
-                    string? filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", imagePath);
-
-                    // Check if the directory exists; if not, create it
-                    string? catPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", catName);
-                    if (!Directory.Exists(catPath))
-                        Directory.CreateDirectory(catPath);
-                    
-                    using (var stream = new FileStream(filePath, FileMode.Create))
-                        await img.CopyToAsync(stream);
-                    
-
-                    productImages.ProductID = ProductID;
-                    productImages.IsCover = isCover;
-                    productImages.CreatedBy = CurrentUserName;
-                    productImages.CreatedDate = DateTime.Now;
-                    productImages.ImageName = GetImageNameWithExtension(img.FileName, pRODUCT.Name + "_" + pRODUCT.AutoId);
-                    productImages.ImagePath = imagePath;
-
-                    _context.Add(productImages);
-                    await _context.SaveChangesAsync();
-
-                    HttpContext.Session.Remove(Constant.PRODUCTS_LIST);
-                    HttpContext.Session.Remove(Constant.TOTAL_PRODUCTS_LIST);
-                    TempData["Success"] = "Successfully added.";
-                }
-            }
-            catch(Exception ex)
-            {
-                Console.WriteLine(ex.Message);
-                TempData["Error"] = "Failed! Something went wrong";
-            }
-            return RedirectToAction(nameof(Index));
-        }
-
-        private string? GetImageNameWithExtension(string fileName,string productName)
-        {
-            if (string.IsNullOrEmpty(fileName) || string.IsNullOrEmpty(productName))
-            {
-                return null;
-            }
-            int lastDotIndex = fileName.LastIndexOf('.');
-            if (lastDotIndex >= 0)
-            {
-                fileName = productName!.Replace(" ", "") + fileName.Substring(lastDotIndex);
-            }
-
-            return fileName;
-        }
         // GET: SystemAdmin/Create
         public IActionResult Create()
         {
@@ -224,8 +84,8 @@ namespace Eshop.Web.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ProductID,Name,Description,Price,Buying_Price,ImageData,ImageName,CreatedBy,CreatedDate,CurrentStock,Cat_Id,IsAvailabe,Category1")] Product product)
-        { 
+        public async Task<IActionResult> Create(Product product)
+        {
             if (ModelState.IsValid)
             {
                 try
@@ -244,16 +104,16 @@ namespace Eshop.Web.Controllers
 
                     _context.Add(product);
                     await _context.SaveChangesAsync();
-                    await AddImages(product.AutoId, 1);
+                    await AddImagesAsync(product.AutoId, 1);
 
                     HttpContext.Session.Remove(Constant.PRODUCTS_LIST);
                     HttpContext.Session.Remove(Constant.TOTAL_PRODUCTS_LIST);
-                    TempData["Success"] = "Added succesfully";    
+                    TempData["Success"] = "Added succesfully";
                     return RedirectToAction(nameof(Index));
                 }
                 catch (Exception ex)
                 {
-                    TempData["Error"] = "Failed! Something went wrong. Alert : "+ex.Message;
+                    TempData["Error"] = "Failed! Something went wrong. Alert : " + ex.Message;
                 }
             }
             ViewData["Cat_Id"] = new SelectList(_context.Category, "AutoId", "CategoryName", product.Cat_Id);
@@ -281,7 +141,7 @@ namespace Eshop.Web.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ProductID,Name,Description,Price,Buying_Price,ImageData,ImageName,CreatedBy,CreatedDate,CurrentStock,Cat_Id,IsAvailabe,Category1")] Product product)
+        public async Task<IActionResult> Edit(int id,Product product)
         {
             if (ModelState.IsValid)
             {
@@ -290,9 +150,9 @@ namespace Eshop.Web.Controllers
                     if (id != product.AutoId)
                     {
                         return NotFound();
-                    }                  
+                    }
                     var img_file = Request.Form.Files.FirstOrDefault();
-                    if(img_file != null)
+                    if (img_file != null)
                     {
                         product.ImageName = img_file.FileName;
                     }
@@ -310,11 +170,11 @@ namespace Eshop.Web.Controllers
 
                     HttpContext.Session.Remove(Constant.PRODUCTS_LIST);
                     HttpContext.Session.Remove(Constant.TOTAL_PRODUCTS_LIST);
-                    TempData["Success"] = "Successfully updated";                   
+                    TempData["Success"] = "Successfully updated";
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!ProductExists(product.AutoId))
+                    if (!await ProductExists(product.AutoId))
                     {
                         return NotFound();
                     }
@@ -391,9 +251,142 @@ namespace Eshop.Web.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        private bool ProductExists(int id)
+        //For adding photos to the image table
+        public async Task<IActionResult> AddImagesAsync(int? ProductID, int? isCover)
         {
-            return (_context.Products?.Any(e => e.AutoId == id)).GetValueOrDefault();
+            try
+            {
+                ProductImages productImages = new();
+                var img = Request.Form.Files.FirstOrDefault();
+                var pRODUCT = await _context.Products.FindAsync(ProductID);
+                if (img is not null && pRODUCT is not null)
+                {
+                    var catName = _context.Category.Find(pRODUCT.Cat_Id)?.CategoryName ?? "Anonymous";
+                    string? imagePath = catName + "\\" + GetImageNameWithExtension(img.FileName, pRODUCT.Name + "_" + pRODUCT.AutoId);
+                    string? filePath = Path.Combine(_webHostEnvironment.WebRootPath, Constant.ImageFolderName, imagePath);
+
+                    // Check if the directory exists; if not, create it
+                    string? catPath = Path.Combine(_webHostEnvironment.WebRootPath, Constant.ImageFolderName, catName);
+                    if (!Directory.Exists(catPath))
+                        Directory.CreateDirectory(catPath);
+
+                    using (var stream = new FileStream(filePath, FileMode.Create))
+                        await img.CopyToAsync(stream);
+
+
+                    productImages.ProductID = ProductID;
+                    productImages.IsCover = isCover;
+                    productImages.CreatedBy = CurrentUserName;
+                    productImages.CreatedDate = DateTime.Now;
+                    productImages.ImageName = GetImageNameWithExtension(img.FileName, pRODUCT.Name + "_" + pRODUCT.AutoId);
+                    productImages.ImagePath = "\\"+Path.Combine(Constant.ImageFolderName,imagePath);
+
+                    await _context.AddAsync(productImages);
+                    await _context.SaveChangesAsync();
+
+                    HttpContext.Session.Remove(Constant.PRODUCTS_LIST);
+                    HttpContext.Session.Remove(Constant.TOTAL_PRODUCTS_LIST);
+                    TempData["Success"] = "Successfully added.";
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                TempData["Error"] = "Failed! Something went wrong";
+            }
+            return RedirectToAction(nameof(Index));
+        }
+
+        //For removing stored photos in image tables
+        public async Task<IActionResult> RemoveImage(int? id)
+        {
+            try
+            {
+                var productImages = await _context.ProductImages.FindAsync(id);
+                if (productImages != null && !string.IsNullOrEmpty(productImages.ImagePath))
+                {
+                    // Construct the full file path to the image
+                    var imagePath = Path.Combine(_webHostEnvironment.WebRootPath, productImages.ImagePath);
+
+                    // Check if the image file exists
+                    if (System.IO.File.Exists(imagePath))
+                    {
+                        // Delete the image file from the server's file system
+                        System.IO.File.Delete(imagePath);
+                        _context.Remove(productImages);
+                        await _context.SaveChangesAsync();
+                    }
+
+                    HttpContext.Session.Remove(Constant.PRODUCTS_LIST);
+                    HttpContext.Session.Remove(Constant.TOTAL_PRODUCTS_LIST);
+                    TempData["Success"] = "Removed succesfully";
+                }
+                else
+                {
+                    TempData["Error"] = "Sorry! You have to delete the product.";
+                }
+            }
+            catch (Exception ex)
+            {
+                TempData["Error"] = "Failed! Something went wrong";
+            }
+            return RedirectToAction(nameof(Index));
+        }
+
+        //For making cover
+        public async Task<IActionResult> MakeCover(int? id)
+        {
+            try
+            {
+                var productImages = await _context.ProductImages.FindAsync(id);
+                if (productImages != null)
+                {
+                    var CoverProductImage = _context.ProductImages.Where(p => p.ProductID == productImages.ProductID && p.IsCover == 1).ToList();
+                    if (CoverProductImage.Count() > 0)
+                    {
+                        CoverProductImage.FirstOrDefault()!.IsCover = null;
+                        _context.Update(productImages);
+                        await _context.SaveChangesAsync();
+                    }
+
+                    productImages.IsCover = 1;
+                    _context.Update(productImages);
+                    await _context.SaveChangesAsync();
+
+                    HttpContext.Session.Remove(Constant.PRODUCTS_LIST);
+                    HttpContext.Session.Remove(Constant.TOTAL_PRODUCTS_LIST);
+                    TempData["Success"] = "Cover setted succesfully";
+                }
+                else
+                {
+                    TempData["Error"] = "Sorry! You have to delete the product.";
+                }
+            }
+            catch (Exception ex)
+            {
+                TempData["Error"] = "Failed! Something went wrong";
+            }
+            return RedirectToAction(nameof(Index));
+        }
+
+        private string? GetImageNameWithExtension(string fileName, string productName)
+        {
+            if (string.IsNullOrEmpty(fileName) || string.IsNullOrEmpty(productName))
+            {
+                return null;
+            }
+            int lastDotIndex = fileName.LastIndexOf('.');
+            if (lastDotIndex >= 0)
+            {
+                fileName = productName!.Replace(" ", "") + fileName.Substring(lastDotIndex);
+            }
+
+            return fileName;
+        }
+
+        private async Task<bool> ProductExists(int id)
+        {
+            return (await _context.Products.AnyAsync(e => e.AutoId == id));
         }
         protected override void Dispose(bool disposing)
         {

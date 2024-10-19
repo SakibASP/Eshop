@@ -1,28 +1,18 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Eshop.Web.Data;
-using Eshop.Web.Models;
 using Eshop.Web.Helper;
-using Microsoft.AspNetCore.Identity;
 using System.Security.Claims;
-using Eshop.Web.Models.ViewModels;
-using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.Caching.Distributed;
-using Azure;
 using Eshop.ViewModels.BusinessDomains;
 using Eshop.Models.BusinessDomains;
 using Eshop.Utils;
 using Eshop.Models.Menu;
+using Eshop.Web.Common;
 
-namespace Eshop.Web.Common
+namespace Eshop.Web.Controllers.Common
 {
-    public abstract class BaseController<T> : Controller where T : BaseController<T>
+    public abstract class BaseController : Controller
     {
-        //private ILogger<T>? _logger;
-        //private IDistributedCache _Cache;
-        //protected IDistributedCache? cache => _Cache ?? throw new ArgumentNullException(nameof(_Cache));
-        //protected ILogger<T>? Logger => _logger ?? (_logger = HttpContext.RequestServices.GetService<ILogger<T>>());
-
         public string? CurrentUserId { get; set; }
         public string? CurrentUserName;
         public List<ProductViewModel>? S_PRODUCT_LIST;
@@ -33,9 +23,11 @@ namespace Eshop.Web.Common
         public decimal? S_CRICKET_PERCENTAGE;
         public int? S_PENDING_ORDERS;
 
-        private ApplicationDbContext _context = new ApplicationDbContext();
-        public override void OnActionExecuting(ActionExecutingContext filterContext)
+        public override async Task OnActionExecutionAsync(ActionExecutingContext filterContext, ActionExecutionDelegate next)
         {
+            //base.OnActionExecuting(filterContext);
+
+            using ApplicationDbContext _context = new();
             base.OnActionExecuting(filterContext);
             if (filterContext.HttpContext.User.Identity!.IsAuthenticated)
             {
@@ -47,7 +39,7 @@ namespace Eshop.Web.Common
 
             // User Rights Handling
             var SessionMenu = HttpContext.Session.GetObjectFromJsonList<DynamicMenuItem>(Constant.Menu);
-            if(SessionMenu != null)
+            if (SessionMenu != null)
             {
                 var Menu = (IEnumerable<DynamicMenuItem>)SessionMenu;
                 var path = Request.Path.ToString();
@@ -65,21 +57,8 @@ namespace Eshop.Web.Common
                         HttpContext.Response.Redirect(Request.Path);
                     }
 
-                }                
+                }
             }
-            //Store Viewing Products to a Session
-            //var SessionProducts = HttpContext.Session.GetObjectFromJsonList<ProductViewModel>(Constant.PRODUCTS_LIST);
-            //if (SessionProducts != null)
-            //{
-            //    S_PRODUCT_LIST = (List<ProductViewModel>)SessionProducts;
-            //}
-            //else
-            //{
-            //    S_PRODUCT_LIST = Utility.GetProducts(_context, null, null, null, null);
-            //    HttpContext.Session.SetObjectAsJson<ProductViewModel>(Constant.PRODUCTS_LIST, S_PRODUCT_LIST);
-
-            //    //var SessionProducts = HttpContext.Session.GetObjectFromJsonList<ProductViewModel>(Constant.PRODUCTS_LIST);
-            //}
 
             //Store Stock Percentage to a Session
             var SessionSoccer = HttpContext.Session.GetInt32(Constant.SOCCER);
@@ -113,21 +92,9 @@ namespace Eshop.Web.Common
 
             if (CurrentUserId != null)
             {
-                //Store All Products to a Session
-                //var SessionProductsTotal = HttpContext.Session.GetObjectFromJsonList<Product>(Constant.TOTAL_PRODUCTS_LIST);
-                //if (SessionProductsTotal != null)
-                //{
-                //    S_TOTAL_PRODUCT_LIST = (List<Product>?)SessionProductsTotal;
-                //}
-                //else
-                //{
-                //    S_TOTAL_PRODUCT_LIST = Utility.GetTotalProducts(_context);       
-                //    HttpContext.Session.SetObjectAsJson<Product>(Constant.TOTAL_PRODUCTS_LIST, S_TOTAL_PRODUCT_LIST);
-                //}
-
                 //Store Pending Orders to a Session
                 var orderPending = HttpContext.Session.GetInt32(Constant.PENDING_ORDERS);
-                if(orderPending != null)
+                if (orderPending != null)
                 {
                     S_PENDING_ORDERS = orderPending;
                     ViewData["OrdersPending"] = S_PENDING_ORDERS;
@@ -135,12 +102,14 @@ namespace Eshop.Web.Common
                 else
                 {
                     int? _pendingOrders = 0;
-                    Utility.GetPendingOrders(_context,out _pendingOrders);
+                    Utility.GetPendingOrders(_context, out _pendingOrders);
                     S_PENDING_ORDERS = _pendingOrders;
                     ViewData["OrdersPending"] = S_PENDING_ORDERS;
                     HttpContext.Session.SetInt32(Constant.PENDING_ORDERS, Convert.ToInt32(S_PENDING_ORDERS));
                 }
             }
+            // Call the next action in the pipeline
+            await next();
         }
     }
 }

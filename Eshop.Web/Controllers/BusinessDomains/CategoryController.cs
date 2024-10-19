@@ -6,15 +6,15 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using Eshop.Web.Common;
 using Eshop.Web.Data;
 using Eshop.Web.Models;
 using Eshop.Models.BusinessDomains;
+using Eshop.Web.Controllers.Common;
 
-namespace Eshop.Web.Controllers
+namespace Eshop.Web.Controllers.BusinessDomains
 {
     [Authorize]
-    public class CategoryController : BaseController<CategoryController>
+    public class CategoryController : BaseController
     {
         private readonly ApplicationDbContext _context;
 
@@ -26,9 +26,9 @@ namespace Eshop.Web.Controllers
         // GET: Category
         public async Task<IActionResult> Index()
         {
-              return _context.Category != null ? 
-                          View(await _context.Category.ToListAsync()) :
-                          Problem("Entity set 'ApplicationDbContext.Category'  is null.");
+            return _context.Category != null ?
+                        View(await _context.Category.ToListAsync()) :
+                        Problem("Entity set 'ApplicationDbContext.Category'  is null.");
         }
 
         // GET: Category/Details/5
@@ -132,7 +132,7 @@ namespace Eshop.Web.Controllers
                     return RedirectToAction(nameof(Index));
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 TempData["Error"] = "Somthing Went Wrong";
             }
@@ -174,9 +174,9 @@ namespace Eshop.Web.Controllers
                     _context.Category.Remove(category);
                     await _context.SaveChangesAsync();
                 }
-                catch(Exception ex)
+                catch (Exception ex)
                 {
-                    TempData["Error"]="Sorry! Failed to remove. Message : "+ex.Message;
+                    TempData["Error"] = "Sorry! Failed to remove. Message : " + ex.Message;
                 }
             }
             return RedirectToAction(nameof(Index));
@@ -184,7 +184,7 @@ namespace Eshop.Web.Controllers
 
         private bool CategoryExists(int id)
         {
-          return (_context.Category?.Any(e => e.AutoId == id)).GetValueOrDefault();
+            return (_context.Category?.Any(e => e.AutoId == id)).GetValueOrDefault();
         }
         protected override void Dispose(bool disposing)
         {

@@ -1,14 +1,13 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Eshop.Web.Common;
 using Eshop.Web.Data;
 using Eshop.Web.Models;
 using System.Data;
 using System.Diagnostics;
 using Eshop.Utils;
 
-namespace Eshop.Web.Controllers
+namespace Eshop.Web.Controllers.Common
 {
-    public class HomeController(ApplicationDbContext context) : BaseController<HomeController>
+    public class HomeController(ApplicationDbContext context) : BaseController
     {
         public IActionResult Index()
         {

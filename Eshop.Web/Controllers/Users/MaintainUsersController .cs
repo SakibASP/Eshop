@@ -5,7 +5,7 @@ using Eshop.Web.Models;
 using Eshop.Web.Models.ViewModels;
 using Eshop.ViewModels.Users;
 
-namespace Eshop.Web.Controllers
+namespace Eshop.Web.Controllers.Users
 {
     public class MaintainUsersController(UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager) : Controller
     {
@@ -82,7 +82,7 @@ namespace Eshop.Web.Controllers
             }
             return RedirectToAction("Index");
         }
-        
+
         public async Task<IActionResult> DeleteUser(string userId)
         {
             var user = await userManager.FindByIdAsync(userId);

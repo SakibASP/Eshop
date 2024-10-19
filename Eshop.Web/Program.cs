@@ -9,6 +9,7 @@ using Eshop.Web.Models;
 using Eshop.Web.Services;
 using System.Security.Claims;
 using Eshop.Web.Repositories;
+using Microsoft.AspNetCore.Mvc.Razor;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -54,20 +55,26 @@ builder.Services.AddTransient<IHttpContextAccessor, HttpContextAccessor>();
 
 builder.Services.AddSession(options =>
 {
-    options.Cookie.Name = ".myEshop.Web.Session";
+    options.Cookie.Name = ".eshop.Web.Session";
     options.IdleTimeout = TimeSpan.FromMinutes(5);
     options.Cookie.HttpOnly = true;
     options.Cookie.IsEssential = true;
 });
 builder.Services.AddDistributedMemoryCache();
 
-//builder.Services.AddDistributedSqlServerCache(options =>
-//{
-//    options.ConnectionString = builder.Configuration.GetConnectionString("DefaultConnection");
-//    options.SchemaName = "dbo";
-//    options.TableName = "StoreCache";
-//    options.DefaultSlidingExpiration = TimeSpan.FromSeconds(10);
-//});
+builder.Services.Configure<RazorViewEngineOptions>(o =>
+{
+    o.ViewLocationFormats.Clear();
+    o.ViewLocationFormats.Add("~/Views/{1}/{0}" + RazorViewEngine.ViewExtension);
+    o.ViewLocationFormats.Add("~/Views/Shared/{0}" + RazorViewEngine.ViewExtension);
+    o.ViewLocationFormats.Add("~/Views/Common/{1}/{0}" + RazorViewEngine.ViewExtension);
+    o.ViewLocationFormats.Add("~/Views/Users/{1}/{0}" + RazorViewEngine.ViewExtension);
+    o.ViewLocationFormats.Add("~/Views/BusinessDomains/{1}/{0}" + RazorViewEngine.ViewExtension);
+    o.ViewLocationFormats.Add("~/Views/ApiIntegration/{1}/{0}" + RazorViewEngine.ViewExtension);
+    o.ViewLocationFormats.Add("~/Views/Report/{1}/{0}" + RazorViewEngine.ViewExtension);
+    o.ViewLocationFormats.Add("~/Views/BackgroundTask/{1}/{0}" + RazorViewEngine.ViewExtension);
+    o.ViewLocationFormats.Add("~/Views/Menu/{1}/{0}" + RazorViewEngine.ViewExtension);
+});
 
 var app = builder.Build();
 

@@ -2,10 +2,9 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Eshop.Web.Data;
-using Eshop.Web.Models.ViewModels;
 using Eshop.ViewModels.Users;
 
-namespace Eshop.Web.Controllers
+namespace Eshop.Web.Controllers.Users
 {
     public class RoleManagerController : Controller
     {
@@ -29,7 +28,7 @@ namespace Eshop.Web.Controllers
                 try
                 {
                     var roleName_ = _context.Roles.Where(r => r.Name == roleName).Count();
-                    if(roleName_ == 0)
+                    if (roleName_ == 0)
                     {
                         await _roleManager.CreateAsync(new IdentityRole(roleName.Trim()));
                         TempData["Success"] = "New Role successfully added.";
@@ -41,7 +40,7 @@ namespace Eshop.Web.Controllers
                 }
                 catch (Exception ex)
                 {
-                    TempData["Error"]="Failed! Something went wrong. "+ex.Message;
+                    TempData["Error"] = "Failed! Something went wrong. " + ex.Message;
                 }
             }
             return RedirectToAction("Index");
@@ -59,7 +58,7 @@ namespace Eshop.Web.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> EditRole(string roleName,string id)
+        public async Task<IActionResult> EditRole(string roleName, string id)
         {
             if (id != null)
             {
@@ -71,7 +70,7 @@ namespace Eshop.Web.Controllers
                         var roleName_ = _context.Roles.Where(x => x.Name == roleName).Count();
                         if (roleName_ == 0)
                         {
-                            await _roleManager.SetRoleNameAsync(role,roleName);
+                            await _roleManager.SetRoleNameAsync(role, roleName);
                             TempData["Success"] = "Role successfully Updated";
                         }
                         else
@@ -98,12 +97,12 @@ namespace Eshop.Web.Controllers
             if (roleName != null)
             {
                 try
-                {         
+                {
                     if (await _roleManager.RoleExistsAsync(roleName.Trim()))
                     {
                         var role = await _roleManager.FindByNameAsync(roleName);
-                        var User_ = _context.UserRoles.Where(x=>x.RoleId==role.Id).Count();
-                        if (User_ == 0) 
+                        var User_ = _context.UserRoles.Where(x => x.RoleId == role.Id).Count();
+                        if (User_ == 0)
                         {
                             await _roleManager.DeleteAsync(role);
                             TempData["Success"] = "Role successfully Removed";
@@ -112,7 +111,7 @@ namespace Eshop.Web.Controllers
                         {
                             TempData["Error"] = "Sorry! Already user exist under this role. ";
                         }
-                         
+
                     }
                     else
                     {

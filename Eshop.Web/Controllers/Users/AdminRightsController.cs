@@ -9,7 +9,7 @@ using Eshop.Web.Models.ViewModels;
 using Eshop.ViewModels.Menu;
 using Eshop.Models.Menu;
 
-namespace Eshop.Web.Controllers
+namespace Eshop.Web.Controllers.Users
 {
     public class AdminRightsController : Controller
     {

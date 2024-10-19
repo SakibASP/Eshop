@@ -1,27 +1,21 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using iText.Html2pdf;
+﻿using iText.Html2pdf;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using Eshop.Web.Common;
 using Eshop.Web.Data;
-using Eshop.Web.Models;
 using Eshop.Utils;
 using Eshop.Models.BusinessDomains;
+using Eshop.Web.Controllers.Common;
 
-namespace Eshop.Web.Controllers
+namespace Eshop.Web.Controllers.BusinessDomains
 {
-    public class ShippingDetailsController(ApplicationDbContext context) : BaseController<ShippingDetailsController>
+    public class ShippingDetailsController(ApplicationDbContext context) : BaseController
     {
         private readonly ApplicationDbContext _context = context;
 
         // GET: ShippingDetails
         public async Task<IActionResult> Index()
         {
-              return View(await _context.ShippingDetails.ToListAsync());
+            return View(await _context.ShippingDetails.ToListAsync());
         }
         public async Task<IActionResult> PendingIndex()
         {
@@ -66,7 +60,7 @@ namespace Eshop.Web.Controllers
             {
                 var Product_ = _context.Products.Where(x => x.AutoId == i.ProductId).FirstOrDefault();
                 Product_.CurrentStock = Product_.CurrentStock - i.Quantity;
-                if(Product_.CurrentStock == 0)
+                if (Product_.CurrentStock == 0)
                 {
                     Product_.IsAvailabe = false;
                 }
@@ -82,7 +76,7 @@ namespace Eshop.Web.Controllers
                 return NotFound();
             }
             var shippingOrders = await _context.ShipmentOrders
-                .Include(x=>x._ShippingDetails)
+                .Include(x => x._ShippingDetails)
                 .Where(m => m.ShippingDetailsId == id).ToListAsync();
             if (shippingOrders == null)
             {
@@ -91,7 +85,7 @@ namespace Eshop.Web.Controllers
 
             return View(shippingOrders);
         }
-        
+
         public async Task<IActionResult> ViewDetails(int? id)
         {
             if (id == null || _context.ShipmentOrders == null)
@@ -99,7 +93,7 @@ namespace Eshop.Web.Controllers
                 return NotFound();
             }
             var shippingOrders = await _context.ShipmentOrders
-                .Include(x=>x._ShippingDetails)
+                .Include(x => x._ShippingDetails)
                 .Where(m => m.ShippingDetailsId == id).ToListAsync();
             if (shippingOrders == null)
             {
@@ -152,7 +146,7 @@ namespace Eshop.Web.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id,ShippingDetails shippingDetails)
+        public async Task<IActionResult> Edit(int id, ShippingDetails shippingDetails)
         {
             if (id != shippingDetails.AutoId)
             {
@@ -210,13 +204,13 @@ namespace Eshop.Web.Controllers
                 return Problem("Entity set 'ApplicationDbContext.ShippingDetails'  is null.");
             }
             var shippingDetails = await _context.ShippingDetails.FindAsync(id);
-            var shipmentOrders = await _context.ShipmentOrders.Where(x=>x.ShippingDetailsId==id).ToListAsync();
+            var shipmentOrders = await _context.ShipmentOrders.Where(x => x.ShippingDetailsId == id).ToListAsync();
             if (shippingDetails != null)
             {
                 _context.ShipmentOrders.RemoveRange(shipmentOrders);
                 _context.ShippingDetails.Remove(shippingDetails);
             }
-            
+
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
@@ -232,7 +226,7 @@ namespace Eshop.Web.Controllers
         }
         private bool ShippingDetailsExists(int id)
         {
-          return _context.ShippingDetails.Any(e => e.AutoId == id);
+            return _context.ShippingDetails.Any(e => e.AutoId == id);
         }
         protected override void Dispose(bool disposing)
         {

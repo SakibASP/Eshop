@@ -13,6 +13,7 @@
         public const string CHESS = "_CHESS";
         public const string CRICKET = "_CRICKET";
         public const string PENDING_ORDERS = "_PENDING_ORDERS";
+        public const string ImageFolderName = "ProductImages";
     }
     public static class SP
     {

@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
-using Eshop.Web.Common;
 using Eshop.Web.Data;
 using Eshop.Web.Helper;
 using Eshop.Web.Models;
@@ -11,18 +10,11 @@ using Eshop.Models.Menu;
 
 namespace Eshop.Web.Components
 {
-    public class MenuViewComponent : ViewComponent
+    public class MenuViewComponent(ApplicationDbContext context, UserManager<ApplicationUser> userManager) : ViewComponent
     {
-        private readonly ApplicationDbContext _context;
-        private readonly SignInManager<ApplicationUser> _signInManager;
-        private readonly UserManager<ApplicationUser> _userManager;
+        private readonly ApplicationDbContext _context = context;
+        private readonly UserManager<ApplicationUser> _userManager = userManager;
 
-        public MenuViewComponent(ApplicationDbContext context, SignInManager<ApplicationUser> signInManager, UserManager<ApplicationUser> userManager)
-        {
-            _context = context;
-            _signInManager = signInManager;
-            _userManager = userManager;
-        }
         public async Task<IViewComponentResult> InvokeAsync()
         {
             HttpContext.Session.Remove(Constant.Menu);

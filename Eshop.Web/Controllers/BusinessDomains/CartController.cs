@@ -5,35 +5,31 @@ using Eshop.Web.Data;
 using Eshop.Web.Helper;
 using Eshop.Web.Models;
 using Eshop.Web.Models.ViewModels;
-using Eshop.Web.Common;
 using Eshop.Web.Interfaces;
 using Eshop.Models.BusinessDomains;
 using Eshop.Utils;
+using Eshop.Web.Controllers.Common;
 
-namespace Eshop.Web.Controllers
+namespace Eshop.Web.Controllers.BusinessDomains
 {
     [Authorize]
-    public class CartController(ApplicationDbContext context, IOrderProcessor orderProcessor) : BaseController<CartController>
+    public class CartController(ApplicationDbContext context, IOrderProcessor orderProcessor) : BaseController
     {
-        public ViewResult Index(Cart cart,string returnUrl)
+        public ViewResult Index(Cart cart, string returnUrl)
         {
             CartIndexViewModel cartIndex = new()
             {
-                //Cart = GetCart(),
-                Cart= cart,
+                Cart = cart,
                 ReturnUrl = returnUrl,
             };
-            //HttpContext.Session.SetInt32(Constant.CartTotal, cart.Lines.Sum(x => x.Quantity));
-            //ViewData["CartTotal"] = HttpContext.Session.GetInt32(Constant.CartTotal);
             return View(cartIndex);
 
         }
 
         //adding new items to the cart
-        public ActionResult AddToCart(Cart cart,int productId, string returnUrl)
+        public async Task<IActionResult> AddToCart(Cart cart, int productId, string returnUrl)
         {
-            //var cart = GetCart();
-            Product? product = context.Products.Include(c=>c.Category1).FirstOrDefault(p => p.AutoId == productId);
+            Product? product = await context.Products.Include(c => c.Category1).FirstOrDefaultAsync(p => p.AutoId == productId);
             if (product != null)
             {
                 try
@@ -41,9 +37,9 @@ namespace Eshop.Web.Controllers
                     var _cart = cart.Lines.Where(x => x.Product.AutoId == product.AutoId).FirstOrDefault();
                     if (_cart != null && _cart.Quantity >= product.CurrentStock)
                     {
-                        TempData["Error"] = "Sorry! You can not add more than available stock.";
+                        TempData["Error"] = "Sorry! All stock has been added.";
                     }
-                    else if(product.CurrentStock == 0)
+                    else if (product.CurrentStock == 0)
                     {
                         TempData["Error"] = "Sorry! This product is out of stock.";
                     }
@@ -52,32 +48,29 @@ namespace Eshop.Web.Controllers
                         cart.AddItem(product, 1);
                         HttpContext.Session.SetInt32(Constant.CartTotal, cart.Lines.Sum(x => x.Quantity));
                         ViewData["CartTotal"] = HttpContext.Session.GetInt32(Constant.CartTotal);
-                        SessionHelper.SetObjectAsJson<Cart>(HttpContext.Session, Constant.CART, cart);
+                        HttpContext.Session.SetObjectAsJson<Cart>(Constant.CART, cart);
                         TempData["Success"] = "Added to the cart successfully";
                     }
                 }
-                catch(Exception ex)
+                catch (Exception ex)
                 {
-                    TempData["Error"]="Error raised. The error is "+ex.Message;
+                    TempData["Error"] = "Error raised. The error is " + ex.Message;
                 }
-                
+
             }
-            CartIndexViewModel cartIndex = new CartIndexViewModel
+            CartIndexViewModel cartIndex = new()
             {
-                //Cart = GetCart(),
                 Cart = cart,
                 ReturnUrl = returnUrl,
             };
-            //return RedirectToAction("Index","Product", new { returnUrl });
             return View(nameof(Index), cartIndex);
         }
 
 
         //removing an item from cart 
-        public RedirectToActionResult RemoveFromCart(Cart cart,int productId, string returnUrl)
+        public async Task<IActionResult> RemoveFromCart(Cart cart, int productId, string returnUrl)
         {
-            //var cart = GetCart();
-            Product? product = context.Products.Include(c=>c.Category1).FirstOrDefault(p => p.AutoId == productId);
+            Product? product = await context.Products.Include(c => c.Category1).FirstOrDefaultAsync(p => p.AutoId == productId);
             if (product != null)
             {
                 try
@@ -86,7 +79,7 @@ namespace Eshop.Web.Controllers
 
                     HttpContext.Session.SetInt32(Constant.CartTotal, cart.Lines.Sum(x => x.Quantity));
                     ViewData["CartTotal"] = HttpContext.Session.GetInt32(Constant.CartTotal);
-                    SessionHelper.SetObjectAsJson<Cart>(HttpContext.Session, Constant.CART, cart);
+                    HttpContext.Session.SetObjectAsJson<Cart>(Constant.CART, cart);
                     TempData["Success"] = "Removed successfully";
                 }
                 catch (Exception ex)
@@ -103,24 +96,12 @@ namespace Eshop.Web.Controllers
             return PartialView(cart);
         }
 
-        //private Cart GetCart()
-        //{
-        //    //Cart cart = (Cart)Session[CART];
-        //    Cart cart = SessionHelper.GetObjectFromJson<Cart>(HttpContext.Session, CART);
-        //    if (cart == null)
-        //    {
-        //        cart = new Cart();
-        //        //Session[CART] = cart;
-        //        SessionHelper.SetObjectAsJson<Cart>(HttpContext.Session,CART,cart);
-        //    }
-        //    return cart;
-        //}
 
         //Shipping Details
         public ViewResult Checkout(Cart cart)
         {
             ShippingDetails shippingDetails = new()
-            { 
+            {
                 IsConfirmed = false,
                 CreatedBy = CurrentUserName,
                 CreatedDate = DateTime.Today
@@ -137,15 +118,15 @@ namespace Eshop.Web.Controllers
             ShipmentOrders shipmentOrders = new();
             if (!cart.Lines.Any())
             {
-                ModelState.AddModelError("", "Sorry, your cart is empty!");               
+                ModelState.AddModelError("", "Sorry, your cart is empty!");
             }
             if (ModelState.IsValid)
             {
                 try
-                {                   
+                {
                     await context.ShippingDetails.AddAsync(shippingDetails);
                     await context.SaveChangesAsync();
-                    foreach(var i in cart.Lines)
+                    foreach (var i in cart.Lines)
                     {
                         shipmentOrders.AutoId = null;
                         shipmentOrders.ShippingDetailsId = shippingDetails.AutoId;
@@ -160,7 +141,7 @@ namespace Eshop.Web.Controllers
                         await context.ShipmentOrders.AddAsync(shipmentOrders);
                         await context.SaveChangesAsync();
                     }
-                    
+
                     await orderProcessor.ProcessOrder(cart, shippingDetails);
                     cart.Clear();
 
@@ -168,10 +149,10 @@ namespace Eshop.Web.Controllers
                     HttpContext.Session.Remove(Constant.CART);
                     HttpContext.Session.Remove(Constant.CartTotal);
                     HttpContext.Session.Remove(Constant.PENDING_ORDERS);
-                    
+
                     return View("Completed");
                 }
-                catch(Exception ex)
+                catch (Exception ex)
                 {
                     TempData["Error"] = "Failed!Something went wrong! " + ex.Message;
                     return View(shippingDetails);
