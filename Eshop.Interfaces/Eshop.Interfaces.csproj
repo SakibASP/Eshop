@@ -7,7 +7,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Braintree" Version="5.27.0" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\Eshop.Models\Eshop.Models.csproj" />
+    <ProjectReference Include="..\Eshop.Utils\Eshop.Utils.csproj" />
+    <ProjectReference Include="..\Eshop.ViewModels\Eshop.ViewModels.csproj" />
   </ItemGroup>
 
 </Project>

@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Eshop.Web.Models;
-using Eshop.Web.Models.ViewModels;
 using Eshop.ViewModels.Users;
 
 namespace Eshop.Web.Controllers.Users

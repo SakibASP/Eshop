@@ -2,10 +2,7 @@
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
-using Eshop.Web.Common;
 using Eshop.Web.Data;
-using Eshop.Web.Models;
-using Eshop.Web.Models.ViewModels;
 using Eshop.ViewModels.Menu;
 using Eshop.Models.Menu;
 

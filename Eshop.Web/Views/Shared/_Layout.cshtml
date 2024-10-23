@@ -7,20 +7,6 @@
     <title>@ViewData["Title"] - Eshop.Web</title>
 
     <style>
-
-        /*    .badge {
-          padding-left: 9px;
-          padding-right: 9px;
-          -webkit-border-radius: 9px;
-          -moz-border-radius: 9px;
-          border-radius: 9px;
-        }*/
-
-        /*.label-warning[href],
-        .badge-warning[href] {
-          background-color: #c67605;
-        }*/
-
         #faBadge {
             font-size: 12px;
             background: #ff0000;
@@ -29,57 +15,6 @@
             vertical-align: top;
             margin-left: -10px;
         }
-    </style>
-
-    <style>
-        /* For Transparent background*/
-        /*body {
-            background-image: url('@Url.Content("~/img/bg.jpg")');
-            background-repeat: no-repeat;
-            background-size: cover;
-            font-family: 'Arial Rounded MT';
-        }
-
-        body {
-            margin: 0;
-            font-family: apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
-            font-size: 14px;
-            font-weight: 400;
-            line-height: 1.5;
-            color: #212529;
-            text-align: left;
-            background-color: #fff;
-        }
-
-        input[type="text"] {
-            text-transform: uppercase;
-            border: solid;
-            border-color: black;
-            border-width: thin;
-            background-color: transparent;
-        }
-
-        input[type="number"] {
-            border: solid;
-            border-color: black;
-            border-width: thin;
-            background-color: transparent;
-        }
-
-        input[type="date"] {
-            border: solid;
-            border-color: black;
-            border-width: thin;
-            background-color: transparent;
-        }
-        */
-
-        /*.table{
-            background-color: white;
-        }*/
-    </style>
-
-    <style>
         .dropdown-submenu {
             position: relative;
         }
@@ -115,9 +50,7 @@
                 display: inline;
             }
         }
-    </style>
 
-    <style>
         div.horizontal {
             width: 100%;
             height: 400px;
@@ -168,13 +101,6 @@
 
 </head>
 
-@*<script>
-        $(document).ready(function () {
-            $('.dropdown').on("click", function (e) {
-                e.stopPropagation();
-            });
-        });
-</script>*@ 
 <body>
     <div class="navbar navbar-expand-lg navbar-toggleable-sm navbar-light bg-white fixed-top box-shadow mb-3">
         <div class="container">            
@@ -199,7 +125,7 @@
                     <li class="nav-item">
                         <a class="nav-link text-dark" style="font-size: medium; font:bold;" asp-area="" asp-controller="Product" asp-action="Index">PRODUCTS</a>
                     </li>                      
-                    @if (User.Identity.IsAuthenticated)
+                    @if (User.Identity!.IsAuthenticated)
                     {
                         <li class="nav-item">
                             <a class="nav-link text-dark" style="font-size: medium; font:bold;" asp-area="" asp-controller="Dashboard" asp-action="Index">ADMIN</a>
@@ -219,7 +145,7 @@
         <br /><br /><br />
         <div class="row" style="background-color:lightgray;border-radius:25px;">
             <div class="row text-center">
-                @if (User.Identity.IsAuthenticated)
+                @if (User.Identity!.IsAuthenticated)
                 {
                     <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">
                         <span style="color: darkblue; font-size: smaller; font:bold">WELCOME </span> <span style="color:dodgerblue; font-size: smaller; font: bold;">@User.Identity.Name!.ToUpper() !</span>
@@ -261,7 +187,7 @@
 
     <footer class="border-top footer text-muted">
         <div class="container">
-            &copy; 2022 - Md. Sakibur Rahman - Microsoft ASP.NET Core MVC.
+            &copy; 2022 - Md. Sakibur Rahman - Microsoft .NET
         </div>
     </footer>
     @await RenderSectionAsync("Scripts", required: false)

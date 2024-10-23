@@ -31,9 +31,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="BoldReports.AspNet.Core" Version="6.2.41" />
-    <PackageReference Include="BoldReports.Net.Core" Version="6.2.41" />
-    <PackageReference Include="Braintree" Version="5.27.0" />
+    <PackageReference Include="BoldReports.AspNet.Core" Version="6.2.42" />
+    <PackageReference Include="BoldReports.Net.Core" Version="6.2.42" />
     <PackageReference Include="DotLiquid" Version="2.2.692" />
     <PackageReference Include="itext7.pdfhtml" Version="5.0.5" />
     <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="8.0.10" />
@@ -57,6 +56,7 @@
   <ItemGroup>
     <Folder Include="wwwroot\img\" />
     <Folder Include="wwwroot\Manager\BusinessDomains\" />
+    <Folder Include="wwwroot\Emails\" />
   </ItemGroup>
 
   <ItemGroup>
@@ -68,6 +68,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Eshop.Interfaces\Eshop.Interfaces.csproj" />
     <ProjectReference Include="..\Eshop.Models\Eshop.Models.csproj" />
     <ProjectReference Include="..\Eshop.Utils\Eshop.Utils.csproj" />
     <ProjectReference Include="..\Eshop.ViewModels\Eshop.ViewModels.csproj" />

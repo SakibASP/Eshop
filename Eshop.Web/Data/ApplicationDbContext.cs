@@ -1,11 +1,9 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Eshop.Web.Models;
-using Eshop.Web.Models.ViewModels;
 using Eshop.Models.Menu;
 using Eshop.Models.BusinessDomains;
 using Eshop.ViewModels.BusinessDomains;
-using Microsoft.CodeAnalysis.Differencing;
 using Eshop.Models.Common;
 using Eshop.Web.Common;
 

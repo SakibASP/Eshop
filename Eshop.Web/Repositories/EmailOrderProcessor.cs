@@ -1,15 +1,17 @@
 ﻿using Eshop.Utils;
-using Eshop.Web.Interfaces;
-using Eshop.Web.Models;
 using System.Net.Mail;
 using System.Net;
 using System.Text;
 using Eshop.Models.BusinessDomains;
+using Eshop.ViewModels.BusinessDomains;
+using Eshop.Interfaces;
+using Serilog;
 
 namespace Eshop.Web.Repositories
 {
-    public class EmailOrderProcessor(EmailSettings settings) : IOrderProcessor
+    public class EmailOrderProcessor(EmailSettings settings, IWebHostEnvironment webHostEnvironment) : IOrderProcessor
     {
+        private readonly IWebHostEnvironment _webHostEnvironment = webHostEnvironment;
         public async Task ProcessOrder(Cart cart, ShippingDetails shippingInfo)
         {
             using var smtpClient = new SmtpClient();
@@ -21,12 +23,14 @@ namespace Eshop.Web.Repositories
                 smtpClient.UseDefaultCredentials = false;
                 smtpClient.Credentials = new NetworkCredential(settings.Username, settings.Password);
 
-                //if (EmailSettings.WriteAsFile)
-                //{
-                //    smtpClient.DeliveryMethod = SmtpDeliveryMethod.SpecifiedPickupDirectory;
-                //    smtpClient.PickupDirectoryLocation = EmailSettings.FileLocation;
-                //    smtpClient.EnableSsl = false;
-                //}
+                if (settings.WriteAsFile)
+                {
+                    var fileLocation = Path.Combine(_webHostEnvironment.WebRootPath, "Emails");
+                    smtpClient.DeliveryMethod = SmtpDeliveryMethod.SpecifiedPickupDirectory;
+                    smtpClient.PickupDirectoryLocation = fileLocation;
+                    smtpClient.EnableSsl = false;
+                }
+
                 StringBuilder body = new StringBuilder()
                                         .AppendLine("A new order has been submitted")
                                         .AppendLine("---")
@@ -65,7 +69,7 @@ namespace Eshop.Web.Repositories
             }
             catch (Exception ex)
             {
-                throw new Exception(ex.Message);
+                Log.Error(ex, "I am from EmailOrderProcessor");
             }
         }
     }

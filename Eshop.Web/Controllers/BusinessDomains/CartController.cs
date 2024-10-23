@@ -3,12 +3,11 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Eshop.Web.Data;
 using Eshop.Web.Helper;
-using Eshop.Web.Models;
-using Eshop.Web.Models.ViewModels;
-using Eshop.Web.Interfaces;
 using Eshop.Models.BusinessDomains;
 using Eshop.Utils;
 using Eshop.Web.Controllers.Common;
+using Eshop.ViewModels.BusinessDomains;
+using Eshop.Interfaces;
 
 namespace Eshop.Web.Controllers.BusinessDomains
 {

@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Eshop.Web.Binder;
 using Eshop.Utils;
 using Eshop.Web.Data;
-using Eshop.Web.Interfaces;
+using Eshop.Interfaces;
 using Eshop.Web.Models;
 using Eshop.Web.Services;
 using System.Security.Claims;
@@ -11,6 +11,7 @@ using Eshop.Web.Repositories;
 using Microsoft.AspNetCore.Mvc.Razor;
 using Serilog.Events;
 using Serilog;
+using Eshop.Web.Extentions;
 
 //Creating Serilog configuration
 Log.Logger = new LoggerConfiguration()
@@ -47,61 +48,13 @@ try
         options.UseSqlServer(connectionString));
     builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
-
-    builder.Services.Configure<IdentityOptions>(options =>
-        options.ClaimsIdentity.UserIdClaimType = ClaimTypes.NameIdentifier);
-    builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
-                .AddEntityFrameworkStores<ApplicationDbContext>()
-                .AddDefaultUI()
-                .AddDefaultTokenProviders();
-    builder.Services.AddControllersWithViews();
-    builder.Services.AddControllersWithViews().AddNewtonsoftJson();
-
-    //Mail shipping
-    EmailSettings EmailSettings = new EmailSettings
-    {
-        WriteAsFile = bool.Parse(builder.Configuration.GetSection("AppSettings:Email.WriteAsFile").Value ?? "false")
-    };
-    //builder.Services.AddTransient<IOrderProcessor, EmailOrderProcessor>();
-    builder.Services.AddTransient<IOrderProcessor>(provider =>
-         new EmailOrderProcessor(EmailSettings));
-
-    //Payment Services
-    builder.Services.AddTransient<IBraintreeService, BraintreeService>();
-
-    //Model Binding
-    builder.Services.AddMvc(o =>
-    {
-        // adds custom binder at first place
-        o.ModelBinderProviders.Insert(0, new CartModelBinderProvider());
-    }).AddRazorRuntimeCompilation();
-    builder.Services.AddTransient<IHttpContextAccessor, HttpContextAccessor>();
-
-    builder.Services.AddSession(options =>
-    {
-        options.Cookie.Name = ".eshop.Web.Session";
-        options.IdleTimeout = TimeSpan.FromMinutes(5);
-        options.Cookie.HttpOnly = true;
-        options.Cookie.IsEssential = true;
-    });
-    builder.Services.AddDistributedMemoryCache();
-
-    builder.Services.Configure<RazorViewEngineOptions>(o =>
-    {
-        o.ViewLocationFormats.Clear();
-        o.ViewLocationFormats.Add("~/Views/{1}/{0}" + RazorViewEngine.ViewExtension);
-        o.ViewLocationFormats.Add("~/Views/Shared/{0}" + RazorViewEngine.ViewExtension);
-        o.ViewLocationFormats.Add("~/Views/Common/{1}/{0}" + RazorViewEngine.ViewExtension);
-        o.ViewLocationFormats.Add("~/Views/Users/{1}/{0}" + RazorViewEngine.ViewExtension);
-        o.ViewLocationFormats.Add("~/Views/BusinessDomains/{1}/{0}" + RazorViewEngine.ViewExtension);
-        o.ViewLocationFormats.Add("~/Views/ApiIntegration/{1}/{0}" + RazorViewEngine.ViewExtension);
-        o.ViewLocationFormats.Add("~/Views/Report/{1}/{0}" + RazorViewEngine.ViewExtension);
-        o.ViewLocationFormats.Add("~/Views/BackgroundTask/{1}/{0}" + RazorViewEngine.ViewExtension);
-        o.ViewLocationFormats.Add("~/Views/Menu/{1}/{0}" + RazorViewEngine.ViewExtension);
-    });
+    //Registering all extented DIs
+    builder.Services.AddConfigurations();
+    builder.Services.AddAllScoped();
+    builder.Services.AddAllTransients(builder.Configuration);
+    builder.Services.AddAllSingleton();
 
     var app = builder.Build();
-
     // Configuring User Roles
     using (var scope = app.Services.CreateScope())
     {

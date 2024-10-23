@@ -1,4 +1,6 @@
-﻿namespace Eshop.Web.Models.ViewModels
+﻿using Eshop.ViewModels.BusinessDomains;
+
+namespace Eshop.ViewModels.BusinessDomains
 {
     public class CartIndexViewModel
     {

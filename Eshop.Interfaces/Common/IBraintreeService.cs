@@ -1,6 +1,6 @@
 ﻿using Braintree;
 
-namespace Eshop.Web.Interfaces
+namespace Eshop.Interfaces
 {
     public interface IBraintreeService
     {

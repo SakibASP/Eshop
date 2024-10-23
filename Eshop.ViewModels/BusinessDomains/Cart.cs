@@ -1,13 +1,10 @@
 ﻿using Eshop.Models.BusinessDomains;
-using Microsoft.AspNetCore.Mvc;
-//using Eshop.Web.Binder;
 
-namespace Eshop.Web.Models
+namespace Eshop.ViewModels.BusinessDomains
 {
-    //[ModelBinder(BinderType = typeof(CartModelBinder))]
     public class Cart
     {
-        private List<CartLine> lineCollection = new List<CartLine>();
+        private List<CartLine> lineCollection = [];
 
         //adding items to ta cart list
         public void AddItem(Product product, int quantity)

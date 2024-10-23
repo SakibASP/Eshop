@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.AspNetCore.Mvc.ModelBinding.Binders;
-using Eshop.Web.Models;
+using Eshop.ViewModels.BusinessDomains;
 
 namespace Eshop.Web.Binder
 {
