@@ -16,3 +16,6 @@
 /Eshop.Web/bin/Debug/net8.0
 /Eshop.Web/Properties
 /Eshop.Web/.vs/ProjectEvaluation
+/Eshop.Interfaces/obj
+/Eshop.Interfaces/bin/Debug/net8.0
+/Eshop.Web/Logs/FatalLogs
