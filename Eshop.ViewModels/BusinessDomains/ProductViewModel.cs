@@ -19,7 +19,6 @@ namespace Eshop.ViewModels.BusinessDomains
         [DisplayName("Image")]
         public string? ImagePath { get; set; }
         public string? CreatedBy { get; set; }
-        public string? ShortDesc { get; set; }
         public DateTime? CreatedDate { get; set; }
 
         public int? CurrentStock { get; set; }
@@ -28,6 +27,6 @@ namespace Eshop.ViewModels.BusinessDomains
         public int? CategoryId { get; set; }
         public string? Category { get; set; }
         public int? IsCover { get; set; }
-        public bool IsAvailabe { get; set; }
+        public bool IsAvailable { get; set; }
     }
 }

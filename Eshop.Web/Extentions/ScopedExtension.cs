@@ -1,4 +1,5 @@
-﻿using Eshop.Interfaces;
+﻿using Eshop.Interfaces.Common;
+using Eshop.Web.Repositories.Common;
 using Eshop.Web.Services;
 
 namespace Eshop.Web.Extentions
@@ -9,6 +10,7 @@ namespace Eshop.Web.Extentions
         {
             serviceCollection.AddScoped<IBraintreeService, BraintreeService>();
             serviceCollection.AddScoped<IHttpContextAccessor, HttpContextAccessor>();
+            serviceCollection.AddScoped<IMenuRepo, MenuRepo>();
             return serviceCollection;
         }
     }

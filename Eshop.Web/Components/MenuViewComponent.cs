@@ -7,35 +7,34 @@ using Eshop.Web.Helper;
 using Eshop.Web.Models;
 using Eshop.Utils;
 using Eshop.Models.Menu;
+using Eshop.Interfaces.Common;
 
 namespace Eshop.Web.Components
 {
-    public class MenuViewComponent(ApplicationDbContext context, UserManager<ApplicationUser> userManager) : ViewComponent
+    public class MenuViewComponent(IMenuRepo menu,ApplicationDbContext context, UserManager<ApplicationUser> userManager) : ViewComponent
     {
+        private readonly IMenuRepo _menu = menu;
         private readonly ApplicationDbContext _context = context;
         private readonly UserManager<ApplicationUser> _userManager = userManager;
 
         public async Task<IViewComponentResult> InvokeAsync()
         {
             HttpContext.Session.Remove(Constant.Menu);
-            var UserId = _userManager.GetUserId(HttpContext.User);
-            var MenuList = _context.Database.SqlQueryRaw<DynamicMenuItem>(
-                                "exec usp_GetMenuData @UserId",
-                                new SqlParameter("UserId", UserId)).ToList();
+            var userId = _userManager.GetUserId(HttpContext.User);
+            var menuList = await _menu.GetAllMenuAsync(userId);
 
-            List<DynamicMenuItem>? Menu = null;
+            List<DynamicMenuItem>? _menuList;
             var SessionMenu = HttpContext.Session.GetObjectFromJsonList<DynamicMenuItem>(Constant.Menu);
             if (SessionMenu != null)
             {
-                Menu = (List<DynamicMenuItem>?)SessionMenu;
+                _menuList = (List<DynamicMenuItem>?)SessionMenu;
             }
             else
             {
-                Menu = MenuList;
-                HttpContext.Session.SetObjectAsJson<DynamicMenuItem>(Constant.Menu, MenuList);
+                _menuList = [.. menuList];
+                HttpContext.Session.SetObjectAsJson<DynamicMenuItem>(Constant.Menu, menuList);
             }
-            return await Task.Run(() => View("_Menu", Menu));
-            //return View("_Menu", Menu);
+            return View("_Menu", _menuList);
         }
     }
 }

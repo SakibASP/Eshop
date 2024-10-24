@@ -55,7 +55,6 @@
 
   <ItemGroup>
     <Folder Include="wwwroot\img\" />
-    <Folder Include="wwwroot\Manager\BusinessDomains\" />
     <Folder Include="wwwroot\Emails\" />
   </ItemGroup>
 

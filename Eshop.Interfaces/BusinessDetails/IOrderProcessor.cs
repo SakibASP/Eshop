@@ -1,7 +1,7 @@
 ﻿using Eshop.Models.BusinessDomains;
 using Eshop.ViewModels.BusinessDomains;
 
-namespace Eshop.Interfaces
+namespace Eshop.Interfaces.BusinessDetails
 {
     public interface IOrderProcessor
     {

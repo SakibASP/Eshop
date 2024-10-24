@@ -7,7 +7,7 @@ using Eshop.Models.BusinessDomains;
 using Eshop.Utils;
 using Eshop.Web.Controllers.Common;
 using Eshop.ViewModels.BusinessDomains;
-using Eshop.Interfaces;
+using Eshop.Interfaces.BusinessDetails;
 
 namespace Eshop.Web.Controllers.BusinessDomains
 {

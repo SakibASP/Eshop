@@ -1,11 +1,24 @@
-﻿.myimg {
+﻿.card {
+    height: 100%;
+}
+
+.card-body {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.myimg {
+    display: flex;
+    justify-content: center;
+    align-items: center;
     transition: transform .2s; /* Animation */
     margin: 0 auto;
 }
 
-    .myimg:hover {
-        transform: scale(1.1); /* (150% zoom - Note: if the zoom is too large, it will go outside of the viewport) */
-    }
+.myimg:hover {
+    transform: scale(1.1); /* (150% zoom - Note: if the zoom is too large, it will go outside of the viewport) */
+}
 
 /*.card-body:hover{
         background-color:aliceblue;

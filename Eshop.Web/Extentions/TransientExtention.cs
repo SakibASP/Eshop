@@ -1,6 +1,7 @@
 ﻿using Eshop.Interfaces;
+using Eshop.Interfaces.BusinessDetails;
 using Eshop.Utils;
-using Eshop.Web.Repositories;
+using Eshop.Web.Repositories.BusinessDomains;
 
 namespace Eshop.Web.Extentions
 {

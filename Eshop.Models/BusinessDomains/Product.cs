@@ -26,14 +26,9 @@ namespace Eshop.Models.BusinessDomains
         public string? CreatedBy { get; set; }
         public DateTime? CreatedDate { get; set; }
 
-        [DisplayName("Stock")]
-        [Range(0,50, ErrorMessage = "Please enter between 1 to 50")]
-        public int CurrentStock { get; set; }
-
         [DisplayName("Category")]
         [Required(ErrorMessage = "Please specify a category")]
         public int? CategoryId { get; set; }
-        public bool IsAvailabe { get; set; }
         [DisplayName("Unit")]
         public int? UnitId { get; set; }
         [DisplayName("Unique Identity")]
@@ -45,7 +40,8 @@ namespace Eshop.Models.BusinessDomains
         public string? ImagePath { get; set; }
 
         [NotMapped]
-        public double TotalPrice { get { return (CurrentStock == 0 ? 1 : CurrentStock) * Price; } }
+        [DisplayName("Stock")]
+        public int CurrentStock { get; set; }
 
         [ForeignKey("CategoryId")]
         public virtual Category? Category { get; set; }

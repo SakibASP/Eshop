@@ -15,10 +15,6 @@ namespace Eshop.Web.Controllers.Common
             ViewData["Watersports"] = Convert.ToInt32(S_WATERSPORTS_PERCENTAGE);
             ViewData["Chess"] = Convert.ToInt32(S_CHESS_PERCENTAGE);
             ViewData["Cricket"] = Convert.ToInt32(S_CRICKET_PERCENTAGE);
-
-            // Trying Raw sql query
-            //var prod = RawSqlQuery.GetDynamicSqlValue(SP.rawProducts);
-
             return View();
         }
 

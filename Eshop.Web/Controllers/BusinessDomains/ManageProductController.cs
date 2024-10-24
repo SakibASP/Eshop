@@ -23,7 +23,7 @@ namespace Eshop.Web.Controllers.BusinessDomains
         private readonly IWebHostEnvironment _webHostEnvironment = webHostEnvironment;
 
         // GET: SystemAdmin
-        public async Task<ActionResult> Index(int? cat_id, string? sortOrder, string? currentFilter, string? searchString, int? page)
+        public async Task<ActionResult> Index(int? CategoryId, string? sortOrder, string? currentFilter, string? searchString, int? page)
         {
             ViewData["CurrentSort"] = sortOrder;
             ViewData["NameSortParm"] = string.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
@@ -38,8 +38,8 @@ namespace Eshop.Web.Controllers.BusinessDomains
             List<Product>? products = await _context.Products.Include(x => x.Category).Take(100).ToListAsync();
 
             // From session
-            if (cat_id != null)
-                products = _context.Products.Where(c => c.CategoryId == cat_id).Take(100).OrderBy(s => s.Name).ToList();
+            if (CategoryId != null)
+                products = _context.Products.Where(c => c.CategoryId == CategoryId).Take(100).OrderBy(s => s.Name).ToList();
 
             if (!string.IsNullOrEmpty(searchString))
                 products = await _context.Products.Include(x => x.Category).Where(s => s.Name!.ToUpper().Contains(searchString.ToUpper()) || s.Category.CategoryName.ToUpper().Contains(searchString.ToUpper())).Take(100).ToListAsync();
@@ -53,7 +53,7 @@ namespace Eshop.Web.Controllers.BusinessDomains
             int pageSize = 6;
             int pageNumber = page ?? 1;
 
-            ViewData["Cat_Id"] = new SelectList(_context.Category.AsNoTracking(), "AutoId", "CategoryName");
+            ViewData["CategoryId"] = new SelectList(_context.Category.AsNoTracking(), "AutoId", "CategoryName");
             //return View(products.ToPagedList(pageNumber, pageSize));
             var product_ = products.AsQueryable().AsNoTracking();
             return View(PaginatedList<Product>.CreateAsync(product_, pageNumber, pageSize));
@@ -75,7 +75,7 @@ namespace Eshop.Web.Controllers.BusinessDomains
         // GET: SystemAdmin/Create
         public IActionResult Create()
         {
-            ViewData["Cat_Id"] = new SelectList(_context.Category, "AutoId", "CategoryName");
+            ViewData["CategoryId"] = new SelectList(_context.Category, "AutoId", "CategoryName");
             ViewData["UnitId"] = new SelectList(_context.Units, "AutoId", "UnitName");
             return View();
         }
@@ -98,10 +98,6 @@ namespace Eshop.Web.Controllers.BusinessDomains
                     }
                     product.CreatedBy = CurrentUserName;
                     product.CreatedDate = DateTime.Now;
-                    if (product.CurrentStock > 0)
-                    {
-                        product.IsAvailabe = true;
-                    }
 
                     _context.Add(product);
                     await _context.SaveChangesAsync();
@@ -117,7 +113,7 @@ namespace Eshop.Web.Controllers.BusinessDomains
                     TempData["Error"] = "Failed! Something went wrong. Alert : " + ex.Message;
                 }
             }
-            ViewData["Cat_Id"] = new SelectList(_context.Category, "AutoId", "CategoryName", product.CategoryId);
+            ViewData["CategoryId"] = new SelectList(_context.Category, "AutoId", "CategoryName", product.CategoryId);
             return View(product);
         }
 
@@ -133,7 +129,7 @@ namespace Eshop.Web.Controllers.BusinessDomains
             {
                 return NotFound();
             }
-            ViewData["Cat_Id"] = new SelectList(_context.Category, "AutoId", "CategoryName", product.CategoryId);
+            ViewData["CategoryId"] = new SelectList(_context.Category, "AutoId", "CategoryName", product.CategoryId);
             return View(product);
         }
 
@@ -157,14 +153,6 @@ namespace Eshop.Web.Controllers.BusinessDomains
                     {
                         product.ImageName = img_file.FileName;
                     }
-                    if (product.CurrentStock > 0)
-                    {
-                        product.IsAvailabe = true;
-                    }
-                    else
-                    {
-                        product.IsAvailabe = false;
-                    }
 
                     _context.Update(product);
                     await _context.SaveChangesAsync();
@@ -186,7 +174,7 @@ namespace Eshop.Web.Controllers.BusinessDomains
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["Cat_Id"] = new SelectList(_context.Category, "AutoId", "CategoryName", product.CategoryId);
+            ViewData["CategoryId"] = new SelectList(_context.Category, "AutoId", "CategoryName", product.CategoryId);
             return View(product);
         }
         // GET: SystemAdmin/Delete/5

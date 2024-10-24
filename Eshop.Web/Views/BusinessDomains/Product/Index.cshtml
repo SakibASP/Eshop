@@ -14,104 +14,89 @@
 
 <link href="~/css/businessdomains/product/product-index.css" rel="stylesheet" />
 
-<div class="container">
-    <div class="row">
-        <div class="col-md-3">
-
-        </div>
-        <div class="col-md-9">
-            <div class="text-center">
-                <h1>Products</h1>
+<div class="row">
+    <div class="col-md-3"></div>
+    <div class="col-md-9">
+        <form asp-action="Index" method="get">
+            <div class="input-group" style="padding-bottom: 10px;">
+                @Html.TextBox("SearchString", (string)ViewBag.CurrentFilter,null,new { @placeholder = "Search products", @class="form-control w-25" })
+                <span class="input-group-btn">
+                    <button type="submit" class="btn btn-info">Search</button>
+                </span>
             </div>
-        </div>    
-    </div>
-    <div class="row">
-        <div class="col-md-3">
-
-            <br /> <br />     
-            
-            <div class="row">
-                <h4><strong>Filter</strong></h4>
-                @using (Html.BeginForm("Index", "Product", FormMethod.Get))
-                {
-                    <div style="text-align:left">
-                        <p>
-                            @Html.DropDownList("cat_id",(SelectList)ViewBag.Cat_Id,"All",new { @class="form-control" }) @* <strong>Category</strong> *@
-                        </p>
-                        <p>
-                            @Html.Editor("price", new { htmlAttributes = new { @class = "form-control", @placeholder = "Price", @type = "number" } }) @* <strong>Price Within</strong> *@
-                        </p>
-                        <p>
-                            <input type="submit" value="Sort" class="btn btn-info form-control" />
-                        </p>
-                    </div>
-                }
-            </div>
-
-            @* <div class="row">
-                <h4><strong>Status</strong></h4>
-                <p>@Html.Editor("Price", new { htmlAttributes = new { @class = "form-control", @style = "background-color: MidnightBlue;color:white;font-size:18px;", @readonly = "readonly", @id = "Price", @placeholder = "Price" } }) 
-                <p>@Html.Editor("CurrentStock", new { htmlAttributes = new { @class = "form-control", @style = "background-color: MidnightBlue;color:white;font-size:18px;", @readonly = "readonly", @id = "CurrentStock", @placeholder = "Stock" } })
-            </div> *@
-        </div>
-
-        <div class="col-md-9">
-            <div class="text-center">
-                @using (Html.BeginForm("Index", "Product", FormMethod.Get))
-                {
-                    <p>
-                        @Html.TextBox("SearchString", (string)ViewBag.CurrentFilter,null,new { @placeholder = "Search products" })
-                        <input type="submit" value="Search" style="font-weight: bold;" />
-                    </p>
-                }
-            </div>
-            <div class="row">
-                @foreach (var item in Model)
-                {
-                    <div class="col-md-4">
-                        <div class="card bg-transparent">
-                            <div class="card-body">
-                                @* @Html.HiddenFor(x=>item.Price)
-                                @Html.HiddenFor(x=>item.CurrentStock) *@
-                                <div class="text-center">
-                                    @if (item.ImagePath != null)
-                                    {
-                                        <div class="myimg" style="margin:2px;">
-                                            <a href="@Url.ActionLink("Details", "Product", new { id = item.ProductId })">
-                                                <img class="img-fluid" style="height:150px;width:150px;" src="~/@Url.Content(item.ImagePath)" />
-                                            </a>
-                                        </div>
-                                    }
-                                    <p class="card-title" style="font-family:Arial Black">@item.Name</p>
-                                    <h4>
-                                        <span>@item.Price.ToString("c")</span>
-                                    </h4>
-                                    <p class="card-text">
-                                        <span>@item.ShortDesc @Html.ActionLink("see details","Details","Product", new{ id = @item.ProductId })</span>
-                                    </p>
-                                </div>
-                            </div>                            
-                            <div>
-                                @using (Html.BeginForm("AddToCart", "Cart"))
-                                {
-                                    <div class="myHiddenInput">
-                                        @Html.Hidden("productId",item.ProductId)
-                                        @Html.Hidden("IsAvailabe",item.IsAvailabe)
-                                        @Html.Hidden("returnUrl", @Context.Request.Path)
-                                        <input type="submit" class="btn btn-success" value="Add To Cart" id="AddCart" />
-                                    </div>
-                                    <br/>
-                                }
-                            </div>                           
-                        </div>
-                        <br />
-                    </div>
-                }
-                
-            </div>
-        </div>
+        </form>
     </div>
 </div>
+ 
+<div class="row">
+    <div class="col-md-3">
+        <form asp-action="Index" method="get">
+            <div class="row">
+                <div class="col-md-12 col-lg-12 col-sm-5 col-5" style="padding-bottom: 2%;">
+                    @Html.DropDownList("categoryId",(SelectList)ViewBag.CategoryId,"All",new { @class="form-control", @id = "categoryId" }) @* <strong>Category</strong> *@
+                </div>
+                <div class="col-md-12 col-lg-12 col-sm-4 col-4" style="padding-bottom: 2%;">
+                    @Html.Editor("price", new { htmlAttributes = new { @class = "form-control", @placeholder = "Price", @type = "number", @id = "price" } }) @* <strong>Price Within</strong> *@
+                </div>
+                <div class="col-md-12 col-lg-12 col-sm-3 col-3" style="padding-bottom: 2%;">
+                    <input type="submit" value="Sort" class="btn btn-warning form-control" />
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="col-md-9">
+        <div class="row">
+
+        </div>
+        <div class="row">
+            @foreach (var item in Model)
+            {
+                <div class="col-md-4 col-sm-6 col-6">
+                    <div class="card h-100">
+                        <div class="card-body d-flex flex-column">
+                            <div class="text-center">
+                                @if (item.ImagePath != null)
+                                {
+                                    <div class="myimg" style="margin:2px;">
+                                        <a href="@Url.ActionLink("Details", "Product", new { id = item.ProductId })">
+                                            <img class="img-fluid" style="height:150px;width:150px;" src="~/@Url.Content(item.ImagePath)" />
+                                        </a>
+                                    </div>
+                                }
+                                else
+                                {
+                                    <div class="myimg" style="margin:2px;">
+                                        <a href="@Url.ActionLink("Details", "Product", new { id = item.ProductId })">
+                                            <img class="img-fluid" style="height:150px;width:150px;" src="~/icons/image-icon-1.png" alt="No Image Available" />
+                                        </a>
+                                    </div>
+                                }
+                                <h4>
+                                    <span>@item.Price.ToString("c")</span>
+                                </h4>
+                                <p class="card-title" style="font-family:Arial Black">@item.Name</p>
+                            </div>
+                        </div>
+                        <div class="mt-auto">
+                            @using (Html.BeginForm("AddToCart", "Cart"))
+                            {
+                                <div class="myHiddenInput">
+                                    @Html.Hidden("productId", item.ProductId)
+                                    @Html.Hidden("IsAvailable", item.IsAvailable)
+                                    @Html.Hidden("returnUrl", @Context.Request.Path)
+                                    <input type="submit" class="btn btn-success" style="background-color: green" value="Add To Cart" id="AddCart" />
+                                </div>
+                                <br />
+                            }
+                        </div>
+                    </div>
+                </div>
+            }
+                
+        </div>
+    </div>
+</div>    
+
 
 @*Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
 @Html.PagedListPager(Model, page => Url.Action("Index", new { page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter  }))*@
@@ -135,43 +120,5 @@
     @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }
-
-    <script type="text/javascript">
-
-        $("#cat_id").change(function () {
-            this.form.submit();
-        });
-
-    </script>
-
-    <script type="text/javascript">
-        // Hover product details
-        $(".card").hover(
-            function () {
-                
-                let Available = $(this).closest('.card').find('#IsAvailabe').val();
-                let Is_available = Available === "True" ? true : false;
-                let button_expire_value = "Out of stock";
-                if(!Is_available){
-                    $(this).closest('.card').find('#AddCart').val(button_expire_value);
-                    $(this).closest('.card').find('#AddCart').css('background-color', 'red');
-                    $(this).closest('.card').find('#AddCart').prop('disabled', true);
-                }
-                else{
-                    $(this).closest('.card').find('#AddCart').prop('disabled', false);
-                }
-                
-                // let stock = parseInt($(this).closest('.card').find('#item_CurrentStock').val());
-                // let price = parseFloat($(this).closest('.card').find('#item_Price').val());   
-                // $("#Price").val(price);
-                // $("#CurrentStock").val(stock);
-            },
-            function () {
-                // $("#Price").val(null);               
-                // $("#CurrentStock").val(null);
-            }
-        );
-
-    </script>
-
+    <script src="~/manager/businessdomains/product/product-index.js"></script>
 }

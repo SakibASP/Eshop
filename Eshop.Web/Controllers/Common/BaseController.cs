@@ -43,20 +43,28 @@ namespace Eshop.Web.Controllers.Common
             {
                 var Menu = (IEnumerable<DynamicMenuItem>)SessionMenu;
                 var path = Request.Path.ToString();
-                if (path != "/" && path.Split('/')[1] != "Home" && path.Split('/')[1] != "Product" && path.Split('/')[1] != "Cart" && path.Split('/')[1] != "Payment")
+                if (!string.IsNullOrEmpty(path))
                 {
-                    var rights = Menu.Where(h => h.MenuURL != "#").Where(p => p.MenuURL.Split('/')[1] == path.Split('/')[1]).ToList();
-                    if (rights.Count() > 0)
+                    //if (path != "/" && path.Split('/')[1] != "Home" && path.Split('/')[1] != "Product" && path.Split('/')[1] != "Cart" && path.Split('/')[1] != "Payment")
+                    if (CheckNextRedirection(path))
                     {
-                        //Do nothing
-                    }
-                    else
-                    {
-                        HttpContext.Session.Clear();
-                        Request.Path = "/Identity/Account/Login";
-                        HttpContext.Response.Redirect(Request.Path);
-                    }
+                        var rights = Menu.Where(h => h.MenuURL != "#").Where(p => p.MenuURL!.Split('/')[1] == path.Split('/')[1]).ToList();
+                        if (rights.Count > 0)
+                        {
+                            //Do nothing
+                        }
+                        else
+                        {
+                            HttpContext.Session.Clear();
+                            Request.Path = Constant.LoginPage;
+                            HttpContext.Response.Redirect(Request.Path);
+                        }
 
+                    }
+                }
+                else
+                {
+                    throw new Exception("Path exception");
                 }
             }
 
@@ -74,11 +82,7 @@ namespace Eshop.Web.Controllers.Common
             }
             else
             {
-                decimal? SoccerPercentage;
-                decimal? WatersportsPercentage;
-                decimal? ChessPercentage;
-                decimal? CricketPercentage;
-                Utility.GetProductStock(out SoccerPercentage, out WatersportsPercentage, out ChessPercentage, out CricketPercentage, _context);
+                Utility.GetProductStock(out decimal? SoccerPercentage, out decimal? WatersportsPercentage, out decimal? ChessPercentage, out decimal? CricketPercentage, _context);
                 S_SOCCER_PERCENTAGE = SoccerPercentage;
                 S_CHESS_PERCENTAGE = ChessPercentage;
                 S_WATERSPORTS_PERCENTAGE = WatersportsPercentage;
@@ -101,15 +105,26 @@ namespace Eshop.Web.Controllers.Common
                 }
                 else
                 {
-                    int? _pendingOrders = 0;
-                    Utility.GetPendingOrders(_context, out _pendingOrders);
-                    S_PENDING_ORDERS = _pendingOrders;
+                    Utility.GetPendingOrders(_context, out int? order_count);
+                    S_PENDING_ORDERS = order_count;
                     ViewData["OrdersPending"] = S_PENDING_ORDERS;
                     HttpContext.Session.SetInt32(Constant.PENDING_ORDERS, Convert.ToInt32(S_PENDING_ORDERS));
                 }
             }
             // Call the next action in the pipeline
             await next();
+        }
+
+        private static bool CheckNextRedirection(string path)
+        {
+            bool goInside;
+            Span<string> permittedContriollers = [ "Home", "Product", "Cart", "Payment" ];
+            if (!path.Equals("/") && !permittedContriollers.Contains(path.Split('/')[1])) 
+                goInside = true;
+            else 
+                goInside = false;
+
+            return goInside;
         }
     }
 }

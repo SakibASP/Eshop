@@ -24,29 +24,29 @@ namespace Eshop.Web.Common
                 return string.Empty;
             }
         }
-        public static async Task<List<ProductViewModel>> GetProducts(ApplicationDbContext db,int? p_id, int? cat_id_, int? price_, string? searchString_)
+        public static async Task<List<ProductViewModel>> GetProducts(ApplicationDbContext db,int? p_id, int? CategoryId_, int? price_, string? searchString_)
         {
-            var product_id = new SqlParameter("@product_id", SqlDbType.Int)
+            var product_id = new SqlParameter("@ProductId", SqlDbType.Int)
             {
                 Value = (object?)p_id ?? DBNull.Value
             };
 
-            var cat_id = new SqlParameter("@cat_id", SqlDbType.Int)
+            var CategoryId = new SqlParameter("@CatId", SqlDbType.Int)
             {
-                Value = (object?)cat_id_ ?? DBNull.Value
+                Value = (object?)CategoryId_ ?? DBNull.Value
             };
 
-            var price = new SqlParameter("@price", SqlDbType.Int)
+            var price = new SqlParameter("@Price", SqlDbType.Int)
             {
                 Value = (object?)price_ ?? DBNull.Value
             };
 
-            var searchString = new SqlParameter("@searchString", SqlDbType.VarChar)
+            var searchString = new SqlParameter("@SearchString", SqlDbType.VarChar)
             {
                 Value = (object?)searchString_ ?? DBNull.Value
             };
 
-            var @params = new[] { product_id, cat_id, price, searchString };
+            var @params = new[] { product_id, CategoryId, price, searchString };
 
             var productViewModel = await db.Database.SqlQueryRaw<ProductViewModel>(SP.GetProducts, @params).ToListAsync();
             return productViewModel;
@@ -61,16 +61,16 @@ namespace Eshop.Web.Common
 
         public static void GetProductStock(out decimal? SoccerPercentage, out decimal? WatersportsPercentage, out decimal? ChessPercentage, out decimal? CricketPercentage, ApplicationDbContext _context)
         {
-            var Products = Convert.ToDecimal(_context.Products.Count());
-            var Soccer = Convert.ToDecimal(_context.Products.Where(p => p.CategoryId == 1).Sum(x=>x.CurrentStock));
-            var Watersports = Convert.ToDecimal(_context.Products.Where(p => p.CategoryId == 2).Sum(x => x.CurrentStock));
-            var Chess = Convert.ToDecimal(_context.Products.Where(p => p.CategoryId == 3).Sum(x => x.CurrentStock));
-            var Cricket = Convert.ToDecimal(_context.Products.Where(p => p.CategoryId == 4).Sum(x => x.CurrentStock));
+            var totalCount = Convert.ToDecimal(_context.Products.Count());
+            var soccerCount = Convert.ToDecimal(GetCategoryStock(_context, 1));
+            var watersportsCount = Convert.ToDecimal(GetCategoryStock(_context, 2));
+            var chessCount = Convert.ToDecimal(GetCategoryStock(_context, 3));
+            var cricketCount = Convert.ToDecimal(GetCategoryStock(_context, 4));
 
-            SoccerPercentage = (Soccer / Products) * 100;
-            WatersportsPercentage = (Watersports / Products) * 100;
-            ChessPercentage = (Chess / Products) * 100;
-            CricketPercentage = (Cricket / Products) * 100;
+            SoccerPercentage = (soccerCount / totalCount) * 100;
+            WatersportsPercentage = (watersportsCount / totalCount) * 100;
+            ChessPercentage = (chessCount / totalCount) * 100;
+            CricketPercentage = (cricketCount / totalCount) * 100;
         }
         public static void GetPendingOrders(ApplicationDbContext _context, out int? order_count)
         {
@@ -85,5 +85,9 @@ namespace Eshop.Web.Common
             }
         }
 
+        public static int GetCategoryStock(ApplicationDbContext _context, int catId)
+        {
+            return _context.Database.SqlQuery<int>($"SELECT dbo.fnCurrentStockByCategory({catId}) as Value").FirstOrDefault();
+        }
     }
 }

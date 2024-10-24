@@ -4,10 +4,10 @@ using System.Net;
 using System.Text;
 using Eshop.Models.BusinessDomains;
 using Eshop.ViewModels.BusinessDomains;
-using Eshop.Interfaces;
 using Serilog;
+using Eshop.Interfaces.BusinessDetails;
 
-namespace Eshop.Web.Repositories
+namespace Eshop.Web.Repositories.BusinessDomains
 {
     public class EmailOrderProcessor(EmailSettings settings, IWebHostEnvironment webHostEnvironment) : IOrderProcessor
     {
@@ -25,7 +25,7 @@ namespace Eshop.Web.Repositories
 
                 if (settings.WriteAsFile)
                 {
-                    var fileLocation = Path.Combine(_webHostEnvironment.WebRootPath, "Emails");
+                    var fileLocation = Path.Combine(_webHostEnvironment.WebRootPath, Constant.EmailFolderName);
                     smtpClient.DeliveryMethod = SmtpDeliveryMethod.SpecifiedPickupDirectory;
                     smtpClient.PickupDirectoryLocation = fileLocation;
                     smtpClient.EnableSsl = false;

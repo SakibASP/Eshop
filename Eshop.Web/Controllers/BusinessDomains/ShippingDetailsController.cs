@@ -60,10 +60,6 @@ namespace Eshop.Web.Controllers.BusinessDomains
             {
                 var Product_ = _context.Products.Where(x => x.AutoId == i.ProductId).FirstOrDefault();
                 Product_.CurrentStock = Product_.CurrentStock - i.Quantity;
-                if (Product_.CurrentStock == 0)
-                {
-                    Product_.IsAvailabe = false;
-                }
                 _context.Products.Update(Product_);
             }
         }

@@ -1,5 +1,5 @@
 ﻿using Braintree;
-using Eshop.Interfaces;
+using Eshop.Interfaces.Common;
 
 namespace Eshop.Web.Services
 {

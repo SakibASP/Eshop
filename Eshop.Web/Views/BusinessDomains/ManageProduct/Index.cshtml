@@ -43,7 +43,7 @@
                     {
                         <div class="row">
                             <div class="col-2">
-                                @Html.DropDownList("Cat_Id", (SelectList)ViewBag.Cat_Id, "ALL", new { @style = "width:150px;", @onchange = "this.form.submit()", @id="cat_id" })
+                                @Html.DropDownList("CategoryId", (SelectList)ViewBag.CategoryId, "ALL", new { @style = "width:150px;", @onchange = "this.form.submit()", @id="CategoryId" })
                             </div>
                             <div class="col-10" style="text-align:right">
                                 <p style="color:black;">
@@ -145,7 +145,7 @@
 @section Scripts {
     <script type="text/javascript">
 
-        $("#cat_id").change(function () {
+        $("#CategoryId").change(function () {
             this.form.submit();
         });
 
